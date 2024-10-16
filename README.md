@@ -1,6 +1,8 @@
 # Mario_MaVio_Things
 
-Welcome to the Mario_MaVio_Things Repository! This is a collaborative project where my friend and I showcase our programming skills by sharing various programs we've created. Whether you're looking for inspiration, learning resources, or just some fun code to explore, you’ve come to the right place!
+## C Programs Branch
+
+Welcome to the C Programs section of the Mario_MaVio_Things Repository! This is a collaborative project where my friend and I showcase our programming skills through various C programs we've created. Whether you're looking for inspiration, learning resources, or just some fun code to explore, you’ve come to the right place!
 
 ## Table of Contents
 
@@ -12,11 +14,11 @@ Welcome to the Mario_MaVio_Things Repository! This is a collaborative project wh
 
 ## Introduction
 
-This repository contains a collection of programs written in different programming languages, during our time in University. Our goal is to learn, share, and inspire others through coding. Feel free to explore the code, run it, or modify it as you like!
+This section contains a collection of C programs developed during our time in university. Our goal is to learn, share, and inspire others through coding. Feel free to explore the code, run it, or modify it as you like!
 
 ## Getting Started
 
-To get started with this repository, follow these steps:
+To get started with this section, follow these steps:
 
 1. **Clone the Repository**
    ```bash
@@ -24,23 +26,18 @@ To get started with this repository, follow these steps:
    ```
 2. **Navigate to the Directory**
    ```bash
-   cd Mario_MaVio_Things
+   cd Mario_MaVio_Things/C
    ```
 3. **Explore the Programs**
-   Each program is organized into folders based on the programming language used. Check out the `README` files in each folder for specific instructions on how to run them.
+   Each program is organized in this folder. Check the comments in the code for specific instructions on how to run them.
 
 ## Programs List
 
-- **Python**
-  - WORKING ON IT....
-
 - **C**
-  - `Autovelox.c`: A fun try replicating a speed ticket generator.
-  - `Bookstore.c`: A beginner and simple back-end app for a bookstore.
-  - MORE THING TO COME
+  - `Autovelox.c`: A fun attempt at replicating a speed ticket generator.
+  - `Bookstore.c`: A simple back-end application for a bookstore.
 
-- **Java**
-  - WORKING ON IT....
+More programs will be added soon!
 
 ## License
 
