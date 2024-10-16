@@ -1,7 +1,5 @@
 # Mario_MaVio_Things
 
-Repository per programmi e progetti che Mario e MaVio fanno per noia e non solo.
-
 Welcome to the Mario_MaVio_Things Repository! This is a collaborative project where my friend and I showcase our programming skills by sharing various programs we've created. Whether you're looking for inspiration, learning resources, or just some fun code to explore, you’ve come to the right place!
 
 ## Table of Contents
