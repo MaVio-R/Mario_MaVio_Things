@@ -15,6 +15,7 @@ struct posizione{
 };
 
 
+
 void generazione_mappa(char [riemp][riemp]);
 
 void stampa(char [riemp] [riemp]);
@@ -23,7 +24,23 @@ void prova(struct posizione [], char [riemp][riemp]);
 
 void down(struct posizione [], char [riemp][riemp]);
 
+void left(struct posizione [], char [riemp][riemp]);
+
+void right(struct posizione [], char [riemp][riemp]);
+
 void quadrato(struct posizione [nmax]);
+
+void elle (struct posizione [nmax]);
+
+void ti(struct posizione [nmax]);
+
+void rettangolo(struct posizione [nmax]);
+
+void controllo_fondo(struct posizione [], char [riemp][riemp]);
+
+void ricrea(struct posizione []);
+
+
 
 int main(int argc, char *argv[]) {
 	
@@ -35,64 +52,54 @@ int main(int argc, char *argv[]) {
 	char tasto;
 
     int fps,confronto=-1;
-    
+
+
     time_t now = time(NULL);
     struct tm *local = localtime(&now);
 
     fps=local->tm_sec;
     
-	
-	
-	
-	
-	
-	
 	generazione_mappa(mappa);
-	    //snake
-    
 	
-	quadrato(blocco);
+
+	ricrea(blocco);
 	prova(blocco, mappa);
 	stampa(mappa);
 
-	
 	do{
 		time_t now = time(NULL);
     	struct tm *local = localtime(&now);
 
-			
 		if(_kbhit()){
 			tasto = _getch();
 			system("cls");
 			stampa(mappa);
-			
-			
+					controllo_fondo(blocco,mappa);
 
 			switch (tasto){
-/*				case 'w':
-					up(mappa);
-					break;
-				
 				case 'a':
-					left(mappa);
-					break; */
+					left(blocco,mappa);
+					break; 
 					
 				case 's':
 					down(blocco,mappa);
 					break;
-				/*	
+					
 				case 'd':
-					right(mappa);
-					break;*/
+					right(blocco,mappa);
+					break;
 			}
 
 
 			system("cls");
 			stampa(mappa);		
 		}else if(confronto!=fps){
+			controllo_fondo(blocco,mappa);
+
 			system("cls");
 			stampa(mappa);
 			confronto = fps;
+			down(blocco,mappa);
 		}
     	fps=local->tm_sec;
     	
@@ -128,7 +135,33 @@ void down(struct posizione blocco[], char mappa[riemp][riemp]){
 	
 	for( i = 0; i < 4; i++){
 		blocco[i].y += 1;
+	}
+	
+	prova(blocco, mappa);
+}
 
+
+void left(struct posizione blocco[], char mappa[riemp][riemp]){
+	
+	for(i = 0; i < 4; i++){
+		mappa[blocco[i].x][blocco[i].y] = '.';
+	}
+	
+	for( i = 0; i < 4; i++){
+		blocco[i].x -= 1;
+	}
+	
+	prova(blocco, mappa);
+}
+
+void right(struct posizione blocco[], char mappa[riemp][riemp]){
+	
+	for(i = 0; i < 4; i++){
+		mappa[blocco[i].x][blocco[i].y] = '.';
+	}
+	
+	for( i = 0; i < 4; i++){
+		blocco[i].x += 1;
 	}
 	
 	prova(blocco, mappa);
@@ -150,7 +183,56 @@ void quadrato(struct posizione blocco[]){
 	
 }
 
+void elle(struct posizione blocco[]){
+	
+	blocco[0].x = 3;	 
+	blocco[0].y = 0;
+		 
+	blocco[1].x = 3;	 
+	blocco[1].y = 1;
+	
+	blocco[2].x = 4;	 
+	blocco[2].y = 1;
+		 
+	blocco[3].x = 5;	 
+	blocco[3].y = 1;
+	
+}
+
+void ti(struct posizione blocco[]){
+	
+	blocco[0].x = 5;	 
+	blocco[0].y = 0;
+		 
+	blocco[1].x = 4;	 
+	blocco[1].y = 1;
+	
+	blocco[2].x = 5;	 
+	blocco[2].y = 1;
+		 
+	blocco[3].x = 6;	 
+	blocco[3].y = 1;
+	
+}
+
+void rettangolo(struct posizione blocco[]){
+	
+	blocco[0].x = 3;	 
+	blocco[0].y = 0;
+		 
+	blocco[1].x = 4;	 
+	blocco[1].y = 0;
+	
+	blocco[2].x = 5;	 
+	blocco[2].y = 0;
+		 
+	blocco[3].x = 6;	 
+	blocco[3].y = 0;
+	
+}
+
 void prova(struct posizione blocco[], char mappa[riemp][riemp]){
+
 	
 	for(i = 0; i < 4; i++){
 		mappa[blocco[i].x][blocco[i].y] = '#';
@@ -161,7 +243,58 @@ void prova(struct posizione blocco[], char mappa[riemp][riemp]){
 	
 }
 
+void ricrea(struct posizione blocco[]){
+	
+		int _blocco;
+	_blocco = (rand()% 4);
+	
+	switch (_blocco){
+		case 0:
+			quadrato(blocco);
+			break;
+			
+		case 1:
+			elle(blocco);
+			break;
+			
+		case 2:
+			ti(blocco);
+			break;
+			
+		case 3:
+			rettangolo(blocco);
+			break;
+	}	
+}
 
+void controllo_fondo(struct posizione blocco[], char mappa[riemp][riemp]){
+	int cont=1;
+	for(i = 0; i < 4; i++){
+		printf("\n oh no %i \n",i);
+		system("pause");
+		if( !(blocco[i].y < blocco[i + 1].y ) ){
+			printf("\n oh no aaaa \n");
+			system("pause");
+			if(mappa[blocco[i].x][blocco[i].y] == '#'){
+				
+			printf("\n oh no bbbbb \n");
+			system("pause");
+				
+			}else if(blocco[i].y == riemp-1){
+					ricrea(blocco);
+					prova(blocco, mappa);
+					printf("\n oh no ccccc \n");
+					system("pause");
+				}
+			
+			
+			
+		}
+		
+	}
+	
+	
+}
 
 
 
