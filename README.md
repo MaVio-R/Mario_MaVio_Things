@@ -50,7 +50,7 @@ This project is licensed under the GNU General Public License v3.0. See the [LIC
 
 For questions or suggestions, please reach out to us:
 
-- MaVio(mailto:mario.menniti.2002@gmail.com)
-- Mario(mailto:nonlaso@gmail.com)
+MaVio GitHub profile [here](https://github.com/MaVio-R)
+Mario GitHub profile [here](https://github.com/)
 
 Happy coding! 🚀
