@@ -12,7 +12,7 @@ int j = 0;
 int ri, rj;
 int lung=-1;
 
-
+ 
 
 
 struct posizione{
