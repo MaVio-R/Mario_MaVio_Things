@@ -1,0 +1,277 @@
+	 SCHEDARIO MULTE 
+
+ 	 Inizio rilevazione: Wed Oct 02 14:42:56 2024
+ 
+---------------------------------------------------------
+ 	 Eccesso di velocita' in data: Wed Oct 02 14:42:56 2024
+ 
+
+ 	 Dell'Auto: 
+ 	 Modello: SERIETRE
+ 	 Colore: BLU
+ 	 Targata: AA123CC 
+
+ 	 Di: pIPPO PLUTO 
+
+ 	 Residente in: CACA
+ 	 Rilevato in: Vomero 
+ 	 Per aver circolato alla velocita' di km/h 131 
+ 	 In tratto con limite velocita' di km/h 71 
+
+ 	 Importo dovuto: Euro 564.000000 
+------------------------------------------------------------------------------------------------------------------
+ 	 Eccesso di velocita' in data: Wed Oct 02 14:42:56 2024
+ 
+
+ 	 Dell'Auto: 
+ 	 Modello: SERIETRE
+ 	 Colore: BLU
+ 	 Targata: AA123CC 
+
+ 	 Di: pIPPO PLUTO 
+
+ 	 Residente in: CACA
+ 	 Rilevato in: Vomero 
+ 	 Per aver circolato alla velocita' di km/h 135 
+ 	 In tratto con limite velocita' di km/h 71 
+
+ 	 Importo dovuto: Euro 564.000000 
+------------------------------------------------------------------------------------------------------------------
+ 	 Eccesso di velocita' in data: Wed Oct 02 14:42:56 2024
+ 
+
+ 	 Dell'Auto: 
+ 	 Modello: SERIETRE
+ 	 Colore: BLU
+ 	 Targata: AA123CC 
+
+ 	 Di: pIPPO PLUTO 
+
+ 	 Residente in: CACA
+ 	 Rilevato in: Vomero 
+ 	 Per aver circolato alla velocita' di km/h 98 
+ 	 In tratto con limite velocita' di km/h 71 
+
+ 	 Importo dovuto: Euro 282.000000 
+------------------------------------------------------------------------------------------------------------------
+ 	 Eccesso di velocita' in data: Wed Oct 02 14:42:56 2024
+ 
+
+ 	 Dell'Auto: 
+ 	 Modello: SERIETRE
+ 	 Colore: BLU
+ 	 Targata: AA123CC 
+
+ 	 Di: pIPPO PLUTO 
+
+ 	 Residente in: CACA
+ 	 Rilevato in: Vomero 
+ 	 Per aver circolato alla velocita' di km/h 82 
+ 	 In tratto con limite velocita' di km/h 71 
+
+ 	 Importo dovuto: Euro 84.599998 
+------------------------------------------------------------------------------------------------------------------
+ 	 Eccesso di velocita' in data: Wed Oct 02 14:42:56 2024
+ 
+
+ 	 Dell'Auto: 
+ 	 Modello: SERIETRE
+ 	 Colore: BLU
+ 	 Targata: AA123CC 
+
+ 	 Di: pIPPO PLUTO 
+
+ 	 Residente in: CACA
+ 	 Rilevato in: Vomero 
+ 	 Per aver circolato alla velocita' di km/h 99 
+ 	 In tratto con limite velocita' di km/h 71 
+
+ 	 Importo dovuto: Euro 282.000000 
+------------------------------------------------------------------------------------------------------------------
+ 	 Eccesso di velocita' in data: Wed Oct 02 14:42:56 2024
+ 
+
+ 	 Dell'Auto: 
+ 	 Modello: SERIETRE
+ 	 Colore: BLU
+ 	 Targata: AA123CC 
+
+ 	 Di: pIPPO PLUTO 
+
+ 	 Residente in: CACA
+ 	 Rilevato in: Vomero 
+ 	 Per aver circolato alla velocita' di km/h 129 
+ 	 In tratto con limite velocita' di km/h 71 
+
+ 	 Importo dovuto: Euro 564.000000 
+------------------------------------------------------------------------------------------------------------------
+ 	 Eccesso di velocita' in data: Wed Oct 02 14:42:56 2024
+ 
+
+ 	 Dell'Auto: 
+ 	 Modello: SERIETRE
+ 	 Colore: BLU
+ 	 Targata: AA123CC 
+
+ 	 Di: pIPPO PLUTO 
+
+ 	 Residente in: CACA
+ 	 Rilevato in: Vomero 
+ 	 Per aver circolato alla velocita' di km/h 114 
+ 	 In tratto con limite velocita' di km/h 71 
+
+ 	 Importo dovuto: Euro 564.000000 
+------------------------------------------------------------------------------------------------------------------
+ 	 Eccesso di velocita' in data: Wed Oct 02 14:42:56 2024
+ 
+
+ 	 Dell'Auto: 
+ 	 Modello: SERIETRE
+ 	 Colore: BLU
+ 	 Targata: AA123CC 
+
+ 	 Di: pIPPO PLUTO 
+
+ 	 Residente in: CACA
+ 	 Rilevato in: Vomero 
+ 	 Per aver circolato alla velocita' di km/h 117 
+ 	 In tratto con limite velocita' di km/h 71 
+
+ 	 Importo dovuto: Euro 564.000000 
+------------------------------------------------------------------------------------------------------------------
+ 	 Eccesso di velocita' in data: Wed Oct 02 14:42:56 2024
+ 
+
+ 	 Dell'Auto: 
+ 	 Modello: SERIETRE
+ 	 Colore: BLU
+ 	 Targata: AA123CC 
+
+ 	 Di: pIPPO PLUTO 
+
+ 	 Residente in: CACA
+ 	 Rilevato in: Vomero 
+ 	 Per aver circolato alla velocita' di km/h 116 
+ 	 In tratto con limite velocita' di km/h 71 
+
+ 	 Importo dovuto: Euro 564.000000 
+------------------------------------------------------------------------------------------------------------------
+ 	 Eccesso di velocita' in data: Wed Oct 02 14:42:56 2024
+ 
+
+ 	 Dell'Auto: 
+ 	 Modello: SERIETRE
+ 	 Colore: BLU
+ 	 Targata: AA123CC 
+
+ 	 Di: pIPPO PLUTO 
+
+ 	 Residente in: CACA
+ 	 Rilevato in: Vomero 
+ 	 Per aver circolato alla velocita' di km/h 100 
+ 	 In tratto con limite velocita' di km/h 71 
+
+ 	 Importo dovuto: Euro 282.000000 
+------------------------------------------------------------------------------------------------------------------
+ 	 Eccesso di velocita' in data: Wed Oct 02 14:42:56 2024
+ 
+
+ 	 Dell'Auto: 
+ 	 Modello: SERIETRE
+ 	 Colore: BLU
+ 	 Targata: AA123CC 
+
+ 	 Di: pIPPO PLUTO 
+
+ 	 Residente in: CACA
+ 	 Rilevato in: Vomero 
+ 	 Per aver circolato alla velocita' di km/h 91 
+ 	 In tratto con limite velocita' di km/h 71 
+
+ 	 Importo dovuto: Euro 282.000000 
+------------------------------------------------------------------------------------------------------------------
+ 	 Eccesso di velocita' in data: Wed Oct 02 14:42:56 2024
+ 
+
+ 	 Dell'Auto: 
+ 	 Modello: SERIETRE
+ 	 Colore: BLU
+ 	 Targata: AA123CC 
+
+ 	 Di: pIPPO PLUTO 
+
+ 	 Residente in: CACA
+ 	 Rilevato in: Vomero 
+ 	 Per aver circolato alla velocita' di km/h 89 
+ 	 In tratto con limite velocita' di km/h 71 
+
+ 	 Importo dovuto: Euro 282.000000 
+------------------------------------------------------------------------------------------------------------------
+ 	 Eccesso di velocita' in data: Wed Oct 02 14:42:56 2024
+ 
+
+ 	 Dell'Auto: 
+ 	 Modello: SERIETRE
+ 	 Colore: BLU
+ 	 Targata: AA123CC 
+
+ 	 Di: pIPPO PLUTO 
+
+ 	 Residente in: CACA
+ 	 Rilevato in: Vomero 
+ 	 Per aver circolato alla velocita' di km/h 79 
+ 	 In tratto con limite velocita' di km/h 71 
+
+ 	 Importo dovuto: Euro 84.599998 
+------------------------------------------------------------------------------------------------------------------
+ 	 Eccesso di velocita' in data: Wed Oct 02 14:42:56 2024
+ 
+
+ 	 Dell'Auto: 
+ 	 Modello: SERIETRE
+ 	 Colore: BLU
+ 	 Targata: AA123CC 
+
+ 	 Di: pIPPO PLUTO 
+
+ 	 Residente in: CACA
+ 	 Rilevato in: Vomero 
+ 	 Per aver circolato alla velocita' di km/h 87 
+ 	 In tratto con limite velocita' di km/h 71 
+
+ 	 Importo dovuto: Euro 282.000000 
+------------------------------------------------------------------------------------------------------------------
+ 	 Eccesso di velocita' in data: Wed Oct 02 14:42:56 2024
+ 
+
+ 	 Dell'Auto: 
+ 	 Modello: SERIETRE
+ 	 Colore: BLU
+ 	 Targata: AA123CC 
+
+ 	 Di: pIPPO PLUTO 
+
+ 	 Residente in: CACA
+ 	 Rilevato in: Vomero 
+ 	 Per aver circolato alla velocita' di km/h 129 
+ 	 In tratto con limite velocita' di km/h 71 
+
+ 	 Importo dovuto: Euro 564.000000 
+------------------------------------------------------------------------------------------------------------------
+ 	 Eccesso di velocita' in data: Wed Oct 02 14:42:56 2024
+ 
+
+ 	 Dell'Auto: 
+ 	 Modello: SERIETRE
+ 	 Colore: BLU
+ 	 Targata: AA123CC 
+
+ 	 Di: pIPPO PLUTO 
+
+ 	 Residente in: CACA
+ 	 Rilevato in: Vomero 
+ 	 Per aver circolato alla velocita' di km/h 133 
+ 	 In tratto con limite velocita' di km/h 71 
+
+ 	 Importo dovuto: Euro 564.000000 
+---------------------------------------------------------

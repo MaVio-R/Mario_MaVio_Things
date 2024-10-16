@@ -1,0 +1,11 @@
+	 Libreria 
+	 Prestito Libro 
+ -TITOLO: aaa
+ -AUTORE: bbb
+ -ISBN: 345
+	 Utente 
+ -NOME: sss
+ -COGNOME: ddd
+ -RECAPITO: 333
+
+ In data: Thu Sep 26 17:59:53 2024
