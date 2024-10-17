@@ -23,12 +23,14 @@ void startUpMap()
 	int i, j;
 	
 	//Setting the map
-	for( i = 0; i <= ROWS; i++)
+	for( i = 0; i < ROWS; i++)
 	{
-		for( j = 0; j <= COLS; j++)
+		for( j = 0; j < COLS; j++)
 		{
-			if( i == 0 || j == 0)
+			if( i == 0 || j == 0 || i == ROWS - 1 || j == COLS - 1){
 				Map[i][j]= '#';
+			}else
+			Map[i][j] = ' ';
 		}
 	}
 }
@@ -37,9 +39,9 @@ void displayMap()
 {
 	int i, j;
 	
-	for( i = 0; i <= ROWS; i++)
+	for( i = 0; i < ROWS; i++)
 	{
-		for( j = 0; j <= COLS; j++)
+		for( j = 0; j < COLS; j++)
 		{
 			printf("%c ", Map[i][j]);
 		}
