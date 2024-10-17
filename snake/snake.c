@@ -6,7 +6,7 @@
 
 
 
-int riemp = 20;
+int riemp = 10;
 int i = 0;
 int j = 0;
 int ri, rj;
