@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
 #include <time.h>
@@ -6,54 +7,56 @@
 #include <stdbool.h>
 
 
-int riemp = 20;
+#define riemp 15
+
 int i=0,j=0;
-int nmax=100;
+#define nmax 100
+char mappa[riemp][riemp];
 
 bool quadratone = false;
-bool liniea = false;
+bool linea = false;
 bool tigrossa = false;
-bool lelloadratne = false;
+bool lello = false;
 
 struct posizione{
 	int x;
 	int y;	
 };
 
+struct posizione blocco[nmax];
 
-void generazione_mappa(char [riemp][riemp]);
+void generazione_mappa();
 
-void stampa(char [riemp] [riemp]);
+void stampa();
 
-void prova(struct posizione [], char [riemp][riemp]);
+void prova();
 
-void down(struct posizione [], char [riemp][riemp]);
+void down();
 
-void left(struct posizione [], char [riemp][riemp]);
+void left();
 
-void right(struct posizione [], char [riemp][riemp]);
+void right();
 
-void quadrato(struct posizione [nmax]);
+void quadrato();
 
-void elle (struct posizione [nmax]);
+void elle ();
 
-void ti(struct posizione [nmax]);
+void ti();
 
-void rettangolo(struct posizione [nmax]);
+void rettangolo();
 
-void controllo_fondo(struct posizione [], char [riemp][riemp]);
+void controllo_fondo();
 
-void ricrea(struct posizione []);
+void ricrea();
 
+bool controllo_riga( );
 
 
 int main(int argc, char *argv[]) {
 	
-	struct posizione blocco[nmax];
 	
 	
     srand(time(NULL));
-	char mappa[riemp][riemp];
 	char tasto;
 
     int fps,confronto=-1;
@@ -64,12 +67,12 @@ int main(int argc, char *argv[]) {
 
     fps=local->tm_sec;
     
-	generazione_mappa(mappa);
+	generazione_mappa();
 	
 
-	ricrea(blocco);
-	prova(blocco, mappa);
-	stampa(mappa);
+	ricrea();
+	prova();
+	stampa();
 
 	do{
 		time_t now = time(NULL);
@@ -78,32 +81,32 @@ int main(int argc, char *argv[]) {
 		if(_kbhit()){
 			tasto = _getch();
 			system("cls");
-			stampa(mappa);
-					controllo_fondo(blocco,mappa);
+			stampa();
+			controllo_fondo();
 			switch (tasto){
 				case 'a':
-					left(blocco,mappa);
+					left();
 					break; 
 					
 				case 's':
-					down(blocco,mappa);
+					down();
 					break;
 					
 				case 'd':
-					right(blocco,mappa);
+					right();
 					break;
 			}
 
 
 			system("cls");
-			stampa(mappa);		
+			stampa();		
 		}else if(confronto!=fps){
-			controllo_fondo(blocco,mappa);
+			controllo_fondo();
 
 			system("cls");
-			stampa(mappa);
+			stampa();
 			confronto = fps;
-			down(blocco,mappa);
+			down();
 		}
     	fps=local->tm_sec;
     	
@@ -113,18 +116,18 @@ int main(int argc, char *argv[]) {
 }
 
 // MAPPA
-void generazione_mappa(char vettore [riemp][riemp]){
+void generazione_mappa(){
 	for(i=0;i<riemp;i++){
 		for(j=0;j<riemp;j++){
-			vettore [i] [j] = '.';
+			mappa [i] [j] = '.';
 		}
 	}	
 }
 
-void stampa(char vettore [riemp] [riemp]){
+void stampa(){
 	for(i=0;i<riemp;i++){
 		for(j=0;j<riemp;j++){
-			printf("%c ",vettore [j] [i]);
+			printf("%c ",mappa [j] [i]);
 		}
 		printf("\n");
 	}	
@@ -133,7 +136,7 @@ void stampa(char vettore [riemp] [riemp]){
 
 
 // MOVIMENTI
-void down(struct posizione blocco[], char mappa[riemp][riemp]){
+void down(){
 	
 	for(i = 0; i < 4; i++){
 		mappa[blocco[i].x][blocco[i].y] = '.';
@@ -143,10 +146,10 @@ void down(struct posizione blocco[], char mappa[riemp][riemp]){
 		blocco[i].y += 1;
 	}
 	
-	prova(blocco, mappa);
+	prova();
 }
 
-void left(struct posizione blocco[], char mappa[riemp][riemp]){
+void left(){
 	
 	for(i = 0; i < 4; i++){
 		mappa[blocco[i].x][blocco[i].y] = '.';
@@ -156,10 +159,10 @@ void left(struct posizione blocco[], char mappa[riemp][riemp]){
 		blocco[i].x -= 1;
 	}
 	
-	prova(blocco, mappa);
+	prova();
 }
 
-void right(struct posizione blocco[], char mappa[riemp][riemp]){
+void right(){
 	
 	for(i = 0; i < 4; i++){
 		mappa[blocco[i].x][blocco[i].y] = '.';
@@ -169,15 +172,15 @@ void right(struct posizione blocco[], char mappa[riemp][riemp]){
 		blocco[i].x += 1;
 	}
 	
-	prova(blocco, mappa);
+	prova();
 }
 
 
 
 // FIGURE
-void quadrato(struct posizione blocco[]){
+void quadrato(){
 	quadratone = true;
-	liniea = false;
+	linea = false;
     tigrossa = false;
 	lello = false;	
 	blocco[0].x = 4;	 
@@ -191,12 +194,12 @@ void quadrato(struct posizione blocco[]){
 		 
 	blocco[3].x = 5;	 
 	blocco[3].y = 1;
-	system("pause");
+	controllo_fondo();
 }
 
-void elle(struct posizione blocco[]){
+void elle(){
 	quadratone = false;
-	liniea = false;
+	linea = false;
     tigrossa = false;
 	lello = true;	
 	blocco[0].x = 3;	 
@@ -210,13 +213,12 @@ void elle(struct posizione blocco[]){
 		 
 	blocco[3].x = 5;	 
 	blocco[3].y = 1;
-	system("pause");
-
+	controllo_fondo();
 }
 
-void ti(struct posizione blocco[]){
+void ti(){
 	quadratone = false;
-	liniea = false;
+	linea = false;
     tigrossa = true;
 	lello = false;	
 	blocco[0].x = 5;	 
@@ -230,66 +232,59 @@ void ti(struct posizione blocco[]){
 		 
 	blocco[3].x = 6;	 
 	blocco[3].y = 1;
-	system("pause");
+	controllo_fondo();
 }
 
-void rettangolo(struct posizione blocco[]){
+void rettangolo(){
 	quadratone = false;
-	liniea = true;
+	linea = true;
     tigrossa = false;
 	lello = false;	
-	blocco[0].x = 3;	 
-	blocco[0].y = 0;
-		 
-	blocco[1].x = 4;	 
-	blocco[1].y = 0;
-	
-	blocco[2].x = 5;	 
-	blocco[2].y = 0;
-		 
-	blocco[3].x = 6;	 
-	blocco[3].y = 0;
-	system("pause");
+	int cont = 3;
+	for( i = 0; i < 4; i++){
+		blocco[i].x = cont;	 
+		blocco[i].y = 0;
+		cont++;		
+	}
+
+	controllo_fondo();
 }
 
 
 
 
 // GENERATORE FIGURA IN MAPPA
-void prova(struct posizione blocco[], char mappa[riemp][riemp]){
-
-	
+void prova(){
 	for(i = 0; i < 4; i++){
 		mappa[blocco[i].x][blocco[i].y] = '#';
 	}
-	
-	
-	
-	
 }
 
 
 //SCELTA BLOCCO
-void ricrea(struct posizione blocco[]){
-	
+void ricrea(){
+	if(!controllo_riga( )){
+		printf("ti puzza il culo");
+		system("pause");
+	}
 		int _blocco;
 	_blocco = (rand()% 4);
 	
 	switch (_blocco){
 		case 0:
-			quadrato(blocco);
+			quadrato();
 			break;
 			
 		case 1:
-			elle(blocco);
+			elle();
 			break;
 			
 		case 2:
-			ti(blocco);
+			ti();
 			break;
 			
 		case 3:
-			rettangolo(blocco);
+			rettangolo();
 			break;
 	}	
 }
@@ -297,51 +292,49 @@ void ricrea(struct posizione blocco[]){
 
 
 //CONTROLLO COLLISIONI
-void controllo_fondo(struct posizione blocco[], char mappa[riemp][riemp]){
+void controllo_fondo(){
 	i = 0;
 	
-	if(!quadratone || !linea){
+	if(!quadratone){
 	for(i = 0; i < 4; i++){
 			if( !(blocco[i].y < blocco[i + 1].y) ){
-				if( (mappa[blocco[i].x][blocco[i].y + 1] == '#') || ( mappa[blocco[3].x + 1][blocco[i].y ] == '#' ) || ( mappa[blocco[0].x - 1][blocco[i].y ] == '#' ) ){
-					ricrea(blocco);
-					prova(blocco, mappa);				
+				if( (mappa[blocco[i].x][blocco[i].y + 1] == '#')  ){
+					ricrea();
+					prova();
+					if(blocco[0].y == 0){
+					}
 				}else if(blocco[i].y + 1 == riemp){
-					ricrea(blocco);
-					prova(blocco, mappa);
+					ricrea();
+					prova();
 				}
 			}
 		}
-	}else if(!linea){
-
+	}else{
 	for(i = 2; i < 4; i++){
 			if( !(blocco[i].y < blocco[i + 1].y) ){
-				if((mappa[blocco[i].x][blocco[i].y + 1] == '#') || ( mappa[blocco[3].x + 1][blocco[i].y ] == '#' ) || ( mappa[blocco[0].x - 1][blocco[i].y ] == '#' )){
-					ricrea(blocco);
-					prova(blocco, mappa);				
+				if((mappa[blocco[i].x][blocco[i].y + 1] == '#') ){
+					ricrea();
+					prova();				
 				}else if(blocco[i].y + 1 == riemp){
-					ricrea(blocco);
-					prova(blocco, mappa);
+					ricrea();
+					prova();
 				}
 			}
-		}	
-	}else{
-
-		for(i = 2; i < 4; i++){
-			if( !(blocco[i].y < blocco[i + 1].y) ){
-				if((mappa[blocco[i].x][blocco[i].y + 1] == '#') || ( mappa[blocco[3].x + 1][blocco[i].y ] == '#' ) || ( mappa[blocco[0].x - 1][blocco[i].y ] == '#' )){
-					ricrea(blocco);
-					prova(blocco, mappa);				
-				}else if(blocco[i].y + 1 == riemp){
-					ricrea(blocco);
-					prova(blocco, mappa);
-				}
-			}
-		}	
+		}
 	}
 }
 
-
+bool controllo_riga( ){
+	bool verifica = true;
+	for( i = 3 ; i < riemp; i++){
+		for( j = 0 ; i < riemp-1; i++){
+			if( mappa[j][i] != mappa[j+1][i]){
+				verifica = false;
+			}
+		}
+	}
+	return verifica;
+}
 
 
 
