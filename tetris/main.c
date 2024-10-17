@@ -5,7 +5,7 @@
 #include <conio.h>
 
 
-int riemp = 10;
+int riemp = 20;
 int i=0,j=0;
 int nmax=100;
 
@@ -75,7 +75,6 @@ int main(int argc, char *argv[]) {
 			system("cls");
 			stampa(mappa);
 					controllo_fondo(blocco,mappa);
-
 			switch (tasto){
 				case 'a':
 					left(blocco,mappa);
@@ -268,27 +267,18 @@ void ricrea(struct posizione blocco[]){
 }
 
 void controllo_fondo(struct posizione blocco[], char mappa[riemp][riemp]){
-	int cont=1;
+	
+	
+	
 	for(i = 0; i < 4; i++){
-		printf("\n oh no %i \n",i);
-		system("pause");
-		if( !(blocco[i].y < blocco[i + 1].y ) ){
-			printf("\n oh no aaaa \n");
-			system("pause");
-			if(mappa[blocco[i].x][blocco[i].y] == '#'){
-				
-			printf("\n oh no bbbbb \n");
-			system("pause");
-				
-			}else if(blocco[i].y == riemp-1){
+		if( !(blocco[i].y < blocco[i + 1].y) ){
+			if(mappa[blocco[i].x][blocco[i].y + 1] == '#'){
+				ricrea(blocco);
+				prova(blocco, mappa);				
+			}else if(blocco[i].y + 1 == riemp){
 					ricrea(blocco);
 					prova(blocco, mappa);
-					printf("\n oh no ccccc \n");
-					system("pause");
 				}
-			
-			
-			
 		}
 		
 	}
