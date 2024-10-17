@@ -3,17 +3,22 @@
 #include <string.h>
 #include <time.h>
 #include <conio.h>
+#include <stdbool.h>
 
 
 int riemp = 20;
 int i=0,j=0;
 int nmax=100;
 
+bool quadratone = false;
+bool liniea = false;
+bool tigrossa = false;
+bool lelloadratne = false;
+
 struct posizione{
 	int x;
 	int y;	
 };
-
 
 
 void generazione_mappa(char [riemp][riemp]);
@@ -107,7 +112,7 @@ int main(int argc, char *argv[]) {
 	return 0;
 }
 
-
+// MAPPA
 void generazione_mappa(char vettore [riemp][riemp]){
 	for(i=0;i<riemp;i++){
 		for(j=0;j<riemp;j++){
@@ -126,6 +131,8 @@ void stampa(char vettore [riemp] [riemp]){
 	
 }
 
+
+// MOVIMENTI
 void down(struct posizione blocco[], char mappa[riemp][riemp]){
 	
 	for(i = 0; i < 4; i++){
@@ -138,7 +145,6 @@ void down(struct posizione blocco[], char mappa[riemp][riemp]){
 	
 	prova(blocco, mappa);
 }
-
 
 void left(struct posizione blocco[], char mappa[riemp][riemp]){
 	
@@ -166,8 +172,14 @@ void right(struct posizione blocco[], char mappa[riemp][riemp]){
 	prova(blocco, mappa);
 }
 
+
+
+// FIGURE
 void quadrato(struct posizione blocco[]){
-	
+	quadratone = true;
+	liniea = false;
+    tigrossa = false;
+	lello = false;	
 	blocco[0].x = 4;	 
 	blocco[0].y = 0;
 		 
@@ -179,11 +191,14 @@ void quadrato(struct posizione blocco[]){
 		 
 	blocco[3].x = 5;	 
 	blocco[3].y = 1;
-	
+	system("pause");
 }
 
 void elle(struct posizione blocco[]){
-	
+	quadratone = false;
+	liniea = false;
+    tigrossa = false;
+	lello = true;	
 	blocco[0].x = 3;	 
 	blocco[0].y = 0;
 		 
@@ -195,11 +210,15 @@ void elle(struct posizione blocco[]){
 		 
 	blocco[3].x = 5;	 
 	blocco[3].y = 1;
-	
+	system("pause");
+
 }
 
 void ti(struct posizione blocco[]){
-	
+	quadratone = false;
+	liniea = false;
+    tigrossa = true;
+	lello = false;	
 	blocco[0].x = 5;	 
 	blocco[0].y = 0;
 		 
@@ -211,11 +230,14 @@ void ti(struct posizione blocco[]){
 		 
 	blocco[3].x = 6;	 
 	blocco[3].y = 1;
-	
+	system("pause");
 }
 
 void rettangolo(struct posizione blocco[]){
-	
+	quadratone = false;
+	liniea = true;
+    tigrossa = false;
+	lello = false;	
 	blocco[0].x = 3;	 
 	blocco[0].y = 0;
 		 
@@ -227,9 +249,13 @@ void rettangolo(struct posizione blocco[]){
 		 
 	blocco[3].x = 6;	 
 	blocco[3].y = 0;
-	
+	system("pause");
 }
 
+
+
+
+// GENERATORE FIGURA IN MAPPA
 void prova(struct posizione blocco[], char mappa[riemp][riemp]){
 
 	
@@ -242,6 +268,8 @@ void prova(struct posizione blocco[], char mappa[riemp][riemp]){
 	
 }
 
+
+//SCELTA BLOCCO
 void ricrea(struct posizione blocco[]){
 	
 		int _blocco;
@@ -266,24 +294,51 @@ void ricrea(struct posizione blocco[]){
 	}	
 }
 
+
+
+//CONTROLLO COLLISIONI
 void controllo_fondo(struct posizione blocco[], char mappa[riemp][riemp]){
+	i = 0;
 	
-	
-	
+	if(!quadratone || !linea){
 	for(i = 0; i < 4; i++){
-		if( !(blocco[i].y < blocco[i + 1].y) ){
-			if(mappa[blocco[i].x][blocco[i].y + 1] == '#'){
-				ricrea(blocco);
-				prova(blocco, mappa);				
-			}else if(blocco[i].y + 1 == riemp){
+			if( !(blocco[i].y < blocco[i + 1].y) ){
+				if( (mappa[blocco[i].x][blocco[i].y + 1] == '#') || ( mappa[blocco[3].x + 1][blocco[i].y ] == '#' ) || ( mappa[blocco[0].x - 1][blocco[i].y ] == '#' ) ){
+					ricrea(blocco);
+					prova(blocco, mappa);				
+				}else if(blocco[i].y + 1 == riemp){
 					ricrea(blocco);
 					prova(blocco, mappa);
 				}
+			}
 		}
-		
+	}else if(!linea){
+
+	for(i = 2; i < 4; i++){
+			if( !(blocco[i].y < blocco[i + 1].y) ){
+				if((mappa[blocco[i].x][blocco[i].y + 1] == '#') || ( mappa[blocco[3].x + 1][blocco[i].y ] == '#' ) || ( mappa[blocco[0].x - 1][blocco[i].y ] == '#' )){
+					ricrea(blocco);
+					prova(blocco, mappa);				
+				}else if(blocco[i].y + 1 == riemp){
+					ricrea(blocco);
+					prova(blocco, mappa);
+				}
+			}
+		}	
+	}else{
+
+		for(i = 2; i < 4; i++){
+			if( !(blocco[i].y < blocco[i + 1].y) ){
+				if((mappa[blocco[i].x][blocco[i].y + 1] == '#') || ( mappa[blocco[3].x + 1][blocco[i].y ] == '#' ) || ( mappa[blocco[0].x - 1][blocco[i].y ] == '#' )){
+					ricrea(blocco);
+					prova(blocco, mappa);				
+				}else if(blocco[i].y + 1 == riemp){
+					ricrea(blocco);
+					prova(blocco, mappa);
+				}
+			}
+		}	
 	}
-	
-	
 }
 
 
@@ -291,8 +346,7 @@ void controllo_fondo(struct posizione blocco[], char mappa[riemp][riemp]){
 
 
 
-
-
+//  (mappa[blocco[i].x][blocco[i].y + 1] == '#') || ( mappa[blocco[3].x + 1][blocco[i].y ] == '#' ) || ( mappa[blocco[0].x - 1][blocco[i].y ] == '#' ) 
 
 
 
