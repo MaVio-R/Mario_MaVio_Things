@@ -1,0 +1,37 @@
+# Project: PacMan
+# Makefile created by Dev-C++ 5.11
+
+CPP      = g++.exe
+CC       = gcc.exe
+WINDRES  = windres.exe
+OBJ      = PacMan-main.o PacManFunction.o ghostFunction.o mapFunction.o
+LINKOBJ  = PacMan-main.o PacManFunction.o ghostFunction.o mapFunction.o
+LIBS     = -L"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib" -L"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/lib" -static-libgcc
+INCS     = -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include"
+CXXINCS  = -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include/c++"
+BIN      = PacMan.exe
+CXXFLAGS = $(CXXINCS) 
+CFLAGS   = $(INCS) 
+RM       = rm.exe -f
+
+.PHONY: all all-before all-after clean clean-custom
+
+all: all-before $(BIN) all-after
+
+clean: clean-custom
+	${RM} $(OBJ) $(BIN)
+
+$(BIN): $(OBJ)
+	$(CC) $(LINKOBJ) -o $(BIN) $(LIBS)
+
+PacMan-main.o: PacMan-main.c
+	$(CC) -c PacMan-main.c -o PacMan-main.o $(CFLAGS)
+
+PacManFunction.o: PacManFunction.c
+	$(CC) -c PacManFunction.c -o PacManFunction.o $(CFLAGS)
+
+ghostFunction.o: ghostFunction.c
+	$(CC) -c ghostFunction.c -o ghostFunction.o $(CFLAGS)
+
+mapFunction.o: mapFunction.c
+	$(CC) -c mapFunction.c -o mapFunction.o $(CFLAGS)
