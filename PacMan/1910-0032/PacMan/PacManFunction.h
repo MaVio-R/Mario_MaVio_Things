@@ -97,4 +97,3 @@
 	/* 	They are the implementation of the previus seen function
 		and they contain the "AI" of the ghosts */
 	    void MoveGhosts(int* x, int* y, char ghost);
-		
