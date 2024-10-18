@@ -1,0 +1,539 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <conio.h>
+#include <ctype.h>
+
+//PacMan
+//#include "PacManFunction.h"	
+
+// punto h
+
+
+/*
+		THESE ARE THE FUNCTION THAT HAVE THE CONTROL OF THE MAP
+*/
+
+// define the dimension of the game pitch	
+	#define ROWS 19 // Y coordinates
+	#define COLS 18 // X coordinates
+
+// configure the map at the initial condition
+	void initMap(); 
+	
+// check if the map is correctly constructed
+	void integrityCheck();
+
+// show the current state of the map
+	void displayMap();
+
+// array containing the map itself
+	char map[ROWS][COLS];
+
+/*
+		THESE ARE THE FUNCTION THAT HAVE THE CONTROL OF PACMAN
+*/
+
+/* setting the current position (cp) of PacMan
+   in particular these are the starting position */
+	int cp_x = 9;
+	int cp_y = 13;
+
+/* this counter is used for the activation of the ghost
+   in base of the numper of steps PacMan has done */
+	int counter = 0; 
+	//POSSIBLE SUBJECT TO TOTAL OVERHAUL
+
+// move is the function that allow the game to be run
+	void move();
+		
+		/* these function are the move set of PacMan
+		   each one of those checks if is possible to 
+		   move in their specified direction and "eats"
+		   the "object" that occupies that space */ 
+		void up();
+		void down();
+		void left();
+		void right();
+		
+/*
+		THESE ARE THE FUNCTION THAT HAVE THE CONTROL OF THE GHOSTS
+*/
+
+//movement of the ghost
+	
+	/*  it needs for the swap of "object that are in the
+	 	way of the ghosts, because the ghosts do not eat
+		"objects" like PacMan" */
+		//char tmp;  
+	
+	/*  it needs for the "AI" of the ghosts.
+	 	It is a random number picked in a pool that goes from 1 to 6 
+		that "decide" in which direction the ghosts will go */
+		int odds;
+
+	/* 	these function are the move set of the ghosts
+	    each one of those checks if is possible to 
+	    move in their specified direction and swap
+	    the "object" that occupies that space with the ghost itself */
+		void goUp(int* x, int* y, char ghost);
+		void goDown(int* x, int* y, char ghost);
+		void goLeft(int* x, int* y, char ghost);
+		void goRight(int* x, int* y, char ghost);
+
+//red
+	/*  setting the current position (cp) of the "RED" ghost
+   		in particular these are the starting position */
+		int cp_xRed = 9;
+		int cp_yRed = 8;
+	
+	/* 	They are the implementation of the previus seen function
+		and they contain the "AI" of the "RED" ghost */
+		void redMove();
+
+//pink
+	/*  setting the current position (cp) of "PINK" ghost
+   		in particular these are the starting position */
+		int cp_xPink = 9;
+		int cp_yPink = 10;
+	
+	/* 	They are the implementation of the previus seen function
+		and they contain the "AI" of the "PINK" ghost */
+		void pinkMove();
+
+//blue
+	/*  setting the current position (cp) of "BLUE" ghost
+   		in particular these are the starting position */
+		int cp_xBlue = 8;
+		int cp_yBlue = 10;
+		
+	/* 	They are the implementation of the previus seen function
+		and they contain the "AI" of the "BLUE" ghost */
+		void blueMove();
+
+//orange
+	/*  setting the current position (cp) of "ORANGE" ghost
+   		in particular these are the starting position */
+		int cp_xOrange = 10;
+		int cp_yOrange = 10;
+		
+	/* 	They are the implementation of the previus seen function
+		and they contain the "AI" of the "ORANGE" ghost */
+		void orangeMove();
+		
+
+
+
+
+
+
+
+//punto h
+
+int main()
+{
+	initMap();
+	displayMap();
+	
+	move();
+	
+	return 0;
+}
+
+
+void initMap()
+{
+	int i, j;
+	
+	for( i=0; i<ROWS; i++)
+	{
+		for( j=0; j<COLS; j++)
+		{
+			if( i == 0 || i == ROWS -1 || j == 0 || j == COLS - 1)
+				map[i][j] = '#';
+			else
+				map[i][j] = ' ';	
+			
+			if(i == cp_y && j == cp_x)
+				map[i][j] = 'C';
+			
+			if(i == cp_yRed && j == cp_xRed)
+				map[i][j] = 'R';
+				
+			if(i == cp_yPink && j == cp_xPink)
+				map[i][j] = 'P';
+				
+			if(i == cp_yBlue && j == cp_xBlue)
+				map[i][j] = 'B';
+				
+			if(i == cp_yOrange && j == cp_xOrange)
+				map[i][j] = 'O';
+		}
+	}
+	
+}
+
+void integrityCheck()
+{
+	int i, j;
+	
+	for( i=ROWS; i==ROWS; i++)
+	{
+		for( j=0; j<=COLS; j++)
+		{
+			map[i][j] = '#';
+		}
+	}
+	
+}
+
+void displayMap()
+{
+	int i, j;
+	
+	for( i=0; i<ROWS; i++)
+	{
+		for( j=0; j<COLS; j++)
+		{
+			printf("%c ", map[i][j]);
+		}
+		printf("\n");
+	}
+	//printf("%c", map[ROWS][2]);
+	//integrityCheck();
+	fflush(stdout);
+}
+
+void goUp(int* x, int* y, char ghost)
+{
+	map[*y][*x] = map[*y - 1][*x];
+	map[*y -= 1 ][*x] = ghost;	
+	
+}
+
+void goDown(int* x, int* y, char ghost)
+{
+	map[*y][*x] = map[*y + 1][*x];
+	map[*y += 1 ][*x] = ghost;
+}
+
+void goLeft(int* x, int* y, char ghost)
+{
+	map[*y][*x] = map[*y][*x - 1];
+	map[*y][*x -= 1 ] = ghost;
+
+}
+
+void goRight(int* x, int* y, char ghost)
+{
+	map[*y][*x] = map[*y][*x + 1];
+	map[*y][*x += 1] = ghost;
+}
+
+void redMove()
+{
+	odds = rand() % (6 - 0 + 1);
+	switch(odds)
+	{
+		case 1:
+			if(map[cp_yRed - 1][cp_xRed] != '#' && map[cp_yRed - 1][cp_xRed] != 'C' && map[cp_yRed - 1][cp_xRed] != 'P' && map[cp_yRed - 1][cp_xRed] != 'B' && map[cp_yRed - 1][cp_xRed] != 'O')
+			{
+				goUp(&cp_xRed, &cp_yRed, 'R');
+				system("cls");
+				displayMap();
+				break;					
+			}
+			else
+				break;
+			
+		case 3:
+			if(map[cp_yRed + 1 ][cp_xRed] != '#' && map[cp_yRed + 1 ][cp_xRed] != 'C' && map[cp_yRed + 1 ][cp_xRed] != 'P' && map[cp_yRed + 1 ][cp_xRed] != 'B' && map[cp_yRed + 1 ][cp_xRed] != 'O')
+			{
+				goDown(&cp_xRed, &cp_yRed, 'R');
+				system("cls");
+				displayMap();
+				break;					
+			}
+			else
+				break;
+
+		case 5:		
+			if(map[cp_yRed][cp_xRed - 1] != '#' && map[cp_yRed][cp_xRed - 1] != 'C' && map[cp_yRed][cp_xRed - 1] != 'P' && map[cp_yRed][cp_xRed - 1] != 'B' && map[cp_yRed][cp_xRed - 1] != 'O' )
+			{
+				goLeft(&cp_xRed, &cp_yRed, 'R');
+				system("cls");
+				displayMap();
+				break;					
+			}
+			else
+				break;
+				
+		default:
+			if(map[cp_yRed][cp_xRed + 1] != '#' && map[cp_yRed][cp_xRed + 1] != 'C' && map[cp_yRed][cp_xRed + 1] != 'P' && map[cp_yRed][cp_xRed + 1] != 'B' && map[cp_yRed][cp_xRed + 1] != 'O')
+			{
+				goRight(&cp_xRed, &cp_yRed, 'R');
+				system("cls");
+				displayMap();
+				break;					
+			}
+			else
+				break;
+	}
+}
+
+void pinkMove()
+{
+	odds = rand() % (6 - 0 + 1);
+		
+	switch(odds)
+	{
+		case 2:
+			if(map[cp_yPink - 1][cp_xPink] != '#' && map[cp_yPink - 1][cp_xPink] != 'C' && map[cp_yPink - 1][cp_xPink] != 'R' && map[cp_yPink - 1][cp_xPink] != 'B' && map[cp_yPink - 1][cp_xPink] != 'O')
+			{
+				goUp(&cp_xPink, &cp_yPink, 'P');
+				system("cls");
+				displayMap();
+				break;					
+			}
+			else
+				break;
+			
+		case 4:
+			if(map[cp_yPink + 1 ][cp_xPink] != '#' && map[cp_yPink + 1 ][cp_xPink] != 'C' && map[cp_yPink + 1 ][cp_xPink] != 'R' && map[cp_yPink + 1 ][cp_xPink] != 'B' && map[cp_yPink + 1 ][cp_xPink] != 'O')
+			{
+				goDown(&cp_xPink, &cp_yPink, 'P');
+				system("cls");
+				displayMap();
+				break;					
+			}
+			else
+				break;
+			
+		case 6:		
+			if(map[cp_yPink][cp_xPink + 1] != '#' && map[cp_yPink][cp_xPink + 1] != 'C' && map[cp_yPink][cp_xPink + 1] != 'R' && map[cp_yPink][cp_xPink + 1] != 'B' && map[cp_yPink][cp_xPink + 1] != 'O')
+			{
+				goRight(&cp_xPink, &cp_yPink, 'P');
+				system("cls");
+				displayMap();
+				break;					
+			}
+			else
+				break;
+				
+		default:
+			if(map[cp_yPink][cp_xPink - 1] != '#' && map[cp_yPink][cp_xPink - 1] != 'C' && map[cp_yPink][cp_xPink - 1] != 'R' && map[cp_yPink][cp_xPink - 1] != 'B' && map[cp_yPink][cp_xPink - 1] != 'O')
+			{
+				goLeft(&cp_xPink, &cp_yPink, 'P');
+				system("cls");
+				displayMap();
+				break;					
+			}
+			else
+				break;
+	}
+}
+
+void blueMove()
+{
+	odds = rand() % (6 - 0 + 1);
+		
+	switch(odds)
+	{
+		case 1:
+			if(map[cp_yBlue + 1][cp_xBlue] != '#' && map[cp_yBlue + 1][cp_xBlue] != 'C' && map[cp_yBlue + 1][cp_xBlue] != 'R' && map[cp_yBlue + 1][cp_xBlue] != 'P' && map[cp_yBlue + 1][cp_xBlue] != 'O')
+			{
+				goDown(&cp_xBlue, &cp_yBlue, 'B');
+				system("cls");
+				displayMap();
+				break;					
+			}
+			else
+				break;
+			
+		case 4:
+			if(map[cp_yBlue][cp_xBlue - 1] != '#' && map[cp_yBlue][cp_xBlue - 1] != 'C' && map[cp_yBlue][cp_xBlue - 1] != 'R' && map[cp_yBlue][cp_xBlue - 1] != 'P' && map[cp_yBlue][cp_xBlue - 1] != 'O')
+			{
+				goLeft(&cp_xBlue, &cp_yBlue, 'B');
+				system("cls");
+				displayMap();
+				break;					
+			}
+			else
+				break;
+			
+		case 5:		
+			if(map[cp_yBlue][cp_xBlue + 1] != '#' && map[cp_yBlue][cp_xBlue + 1] != 'C' && map[cp_yBlue][cp_xBlue + 1] != 'R' && map[cp_yBlue][cp_xBlue + 1] != 'P' && map[cp_yBlue][cp_xBlue + 1] != 'O')
+			{
+				goRight(&cp_xBlue, &cp_yBlue, 'B');
+				system("cls");
+				displayMap();
+				break;					
+			}
+			else
+				break;
+				
+		default:
+			if(map[cp_yBlue - 1][cp_xBlue] != '#' &&  map[cp_yBlue - 1][cp_xBlue] != 'C' && map[cp_yBlue - 1][cp_xBlue] != 'R' && map[cp_yBlue - 1][cp_xBlue] != 'P' && map[cp_yBlue - 1][cp_xBlue] != 'O')
+			{
+				goUp(&cp_xBlue, &cp_yBlue, 'B');
+				system("cls");
+				displayMap();
+				break;					
+			}
+			else
+				break;
+	}
+}
+
+void orangeMove()
+{
+	odds = rand() % (6 - 0 + 1);
+		
+	switch(odds)
+	{
+		case 1:
+			if( (map[cp_yOrange - 1][cp_xOrange] != '#' ) && (map[cp_yOrange - 1][cp_xOrange] != 'C') && (map[cp_yOrange - 1][cp_xOrange] != 'R') && (map[cp_yOrange - 1][cp_xOrange] != 'P') && (map[cp_yOrange - 1][cp_xOrange] != 'B'))
+			{
+				goUp(&cp_xOrange, &cp_yOrange, 'O');
+				system("cls");
+				displayMap();
+				break;					
+			}
+			else
+				break;
+			
+		case 4:
+			if((map[cp_yOrange][cp_xOrange - 1] != '#') && (map[cp_yOrange][cp_xOrange - 1] != 'C') && (map[cp_yOrange][cp_xOrange - 1] != 'R') && (map[cp_yOrange][cp_xOrange - 1] != 'P') && (map[cp_yOrange][cp_xOrange - 1] != 'B'))
+			{
+				goLeft(&cp_xOrange, &cp_yOrange, 'O');
+				system("cls");
+				displayMap();
+				break;					
+			}
+			else
+				break;
+			
+		case 5:		
+			if( (map[cp_yOrange][cp_xOrange + 1] != '#' ) && (map[cp_yOrange][cp_xOrange + 1] != 'C') && (map[cp_yOrange][cp_xOrange + 1] != 'R') && (map[cp_yOrange][cp_xOrange + 1] != 'P') && (map[cp_yOrange][cp_xOrange + 1] != 'B'))
+			{
+				goRight(&cp_xOrange, &cp_yOrange, 'O');
+				system("cls");
+				displayMap();
+				break;					
+			}
+			else
+				break;
+				
+		default:
+			if( (map[cp_yOrange + 1][cp_xOrange] != '#')  &&  (map[cp_yOrange + 1][cp_xOrange] != 'C') && (map[cp_yOrange + 1][cp_xOrange] != 'R') && (map[cp_yOrange + 1][cp_xOrange] != 'P') && (map[cp_yOrange + 1][cp_xOrange] != 'B'))
+			{
+				goDown(&cp_xOrange, &cp_yOrange, 'O');
+				system("cls");
+				displayMap();
+				break;					
+			}
+			else
+				break;
+	}
+}
+
+void up()
+{
+	if(map[cp_y - 1][cp_x] != '#')
+	{
+		map[cp_y][cp_x] = ' ';
+		map[cp_y -= 1][cp_x] = 'C';
+	}
+}
+
+void down()
+{
+	if(map[cp_y + 1][cp_x] != '#')
+	{
+		map[cp_y][cp_x] = ' ';
+		map[cp_y += 1][cp_x] = 'C';
+	}
+}
+
+void left()
+{
+	if(map[cp_y][cp_x - 1] != '#')
+	{
+		map[cp_y][cp_x] = ' ';
+		map[cp_y][cp_x -= 1] = 'C';
+	}
+}
+
+void right()
+{
+	if(map[cp_y][cp_x + 1] != '#')
+	{
+		map[cp_y][cp_x] = ' ';
+		map[cp_y][cp_x += 1] = 'C';
+	}	
+}
+
+void move()
+{
+	int click;
+	
+	while(click != 27)
+	{
+		click = tolower(getch());
+		
+		counter++;
+		
+		if(counter <= 15)
+			redMove();
+		else if(counter <= 30)
+			{
+				redMove();
+				pinkMove();
+			}
+			else if (counter<= 45)
+				{
+					redMove();
+					pinkMove();
+					blueMove();
+				}
+				else
+				{
+					
+					redMove();
+					pinkMove();
+					blueMove();
+					orangeMove();
+				}
+			
+		switch(click)
+		{
+			case 'w':
+				up();
+				system("cls");
+				displayMap();
+				break;
+			
+			case 's':
+				down();
+				system("cls");
+				displayMap();
+				break;		
+			
+			case 'a':
+				left();
+				system("cls");
+				displayMap();
+				break;		
+			
+			case 'd':
+				right();
+				system("cls");
+				displayMap();
+				break;
+				
+			default:
+				system("cls");
+				displayMap();
+				break;
+		}
+	}
+}
