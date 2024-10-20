@@ -28,7 +28,7 @@ void setBoundry()
 			if( i == 0 || i == ROWS -1 || j == 0 || j == COLS - 1)
 				map[i][j] = '#';
 			else
-				map[i][j] = ' ';	
+				map[i][j] = '.';	
 		}
 	}
 }
@@ -155,12 +155,59 @@ void setWalls()
     map[11][16] = ' ';	
 }
 
+void setDot()
+{
+	map[8][8] = ' ';
+    map[9][7] = 'B';
+    map[9][8] = 'P';
+    map[9][9] = 'O';	
+   
+	
+	map[7][1] = ' ';
+    map[7][5] = ' ';
+    map[7][6] = ' ';
+    map[7][7] = ' ';	
+    map[7][9] = ' ';
+    map[7][10] = ' ';
+    map[7][11] = ' ';
+    map[7][15] = ' ';
+    map[8][5] = ' ';	
+    map[8][11] = ' ';
+    map[9][1] = ' ';
+    map[9][2] = ' ';
+    map[9][4] = ' ';
+    map[9][5] = ' ';	
+    map[9][11] = ' ';
+    map[9][12] = ' ';	
+    map[9][14] = ' ';
+    map[9][15] = ' ';
+    map[10][5] = ' ';
+    map[10][11] = ' ';	
+    map[11][1] = ' ';
+    map[11][5] = ' ';
+    map[11][6] = ' ';
+    map[11][7] = ' ';
+    map[11][8] = ' ';	
+    map[11][9] = ' ';
+    map[11][10] = ' ';
+    map[11][11] = ' ';
+    map[11][15] = ' ';
+}
+
+void setFruit()
+{
+	map[11][8] = '8';	
+}
+
 void initMap()
 {	
 	setBoundry();	
 	setPacMan();
 	setGhost();
     setWalls();
+    setDot();
+    //energizer + 50
+    //cherry + 100
 }
 
 void integrityCheck()
@@ -195,19 +242,27 @@ void displayMap()
 				printf("\033[0;31m%c ", map[i][j]);
 			
 			if(map[i][j] == 'P')
-				printf("\033[0;35m%c ", map[i][j]);
+				printf("\033[0;201m%c ", map[i][j]);
 			
 			if(map[i][j] == 'B')
 				printf("\033[0;36m%c ", map[i][j]);
 			
 			if(map[i][j] == 'O')
-				printf("\033[38;5;214m%c ", map[i][j]);
+				printf("\033[38;5;202m%c ", map[i][j]);
+			
+			if(map[i][j] == '.')
+				printf("\033[0;11m%c ", map[i][j]);
+			
+			if(map[i][j] == '8')
+				printf("\033[0;31m%c ", map[i][j]);
 			
 			if(map[i][j] == ' ')
 				printf("%c ", map[i][j]);
 		}
 		printf("\n");
 	}
+	
+	printf("\n SCORE : %d", score);
 	//integrityCheck();
 	fflush(stdout);
 }
@@ -264,10 +319,8 @@ void MoveGhosts(int* x, int* y, char ghost)
 	switch(odds)
 	{
 		case 1:
-			//aggiungi controllo
 			if( (map[*y - 1][*x] != '#' ) && (map[*y - 1][*x] != 'C') && (map[*y - 1][*x] != 'R') && (map[*y - 1][*x] != 'P') && (map[*y - 1][*x] != 'B') && (map[*y - 1][*x] != 'O'))
 			{
-			//modifica i gomovimento
 				goUp(&x, &y, ghost);
 				system("cls");
 				displayMap();
@@ -315,6 +368,8 @@ void up()
 {
 	if(map[cp_y - 1][cp_x] != '#')
 	{
+		map[cp_y - 1][cp_x] == '.' ? score+= 10 : (score = score);
+		
 		map[cp_y][cp_x] = ' ';
 		map[cp_y -= 1][cp_x] = 'C';
 	}
@@ -324,6 +379,8 @@ void down()
 {
 	if(map[cp_y + 1][cp_x] != '#')
 	{
+		map[cp_y + 1][cp_x] == '.' ? score+= 10 : (score = score);
+		
 		map[cp_y][cp_x] = ' ';
 		map[cp_y += 1][cp_x] = 'C';
 	}
@@ -332,7 +389,10 @@ void down()
 void left()
 {
 	if( cp_x - 1 != 0 - 1){
-	    if(map[cp_y][cp_x - 1] != '#'){
+	    if(map[cp_y][cp_x - 1] != '#')
+		{
+			map[cp_y][cp_x - 1] == '.' ? score+= 10 : (score = score);
+			
 		    map[cp_y][cp_x] = ' ';
 		    map[cp_y][cp_x -= 1] = 'C';
 	    }
@@ -346,7 +406,10 @@ void left()
 void right()
 {
 	if( cp_x + 1 != COLS){
-	    if(map[cp_y][cp_x + 1] != '#'){
+	    if(map[cp_y][cp_x + 1] != '#')
+		{
+			map[cp_y][cp_x + 1] == '.' ? score+= 10 : (score = score);
+			
 		    map[cp_y][cp_x] = ' ';
 		    map[cp_y][cp_x += 1] = 'C';
 	    }
@@ -366,6 +429,10 @@ void move()
 		click = tolower(getch());
 		char RED = 'R', BLUE = 'B', PINK = 'P', ORANGE = 'O';
 		counter++;
+		
+		if(score >= 700 || score >= 1700)
+			setFruit();
+		
 		
 		if(counter <= 15)
 			MoveGhosts(&cp_xRed, &cp_yRed, RED);
