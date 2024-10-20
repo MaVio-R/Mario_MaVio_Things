@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include <conio.h>
 #include <ctype.h>
 
@@ -184,7 +185,26 @@ void displayMap()
 	{
 		for( j=0; j<COLS; j++)
 		{
-			printf("%c ", map[i][j]);
+			if(map[i][j] == '#')
+				printf("\033[0;34m%c ", map[i][j]);
+			
+			if(map[i][j] == 'C')
+				printf("\033[0;33m%c ", map[i][j]);
+				
+			if(map[i][j] == 'R')
+				printf("\033[0;31m%c ", map[i][j]);
+			
+			if(map[i][j] == 'P')
+				printf("\033[0;35m%c ", map[i][j]);
+			
+			if(map[i][j] == 'B')
+				printf("\033[0;36m%c ", map[i][j]);
+			
+			if(map[i][j] == 'O')
+				printf("\033[38;5;214m%c ", map[i][j]);
+			
+			if(map[i][j] == ' ')
+				printf("%c ", map[i][j]);
 		}
 		printf("\n");
 	}
