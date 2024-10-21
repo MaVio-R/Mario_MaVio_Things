@@ -51,7 +51,7 @@ AutoIncBuildNr=0
 SyncProduct=1
 
 [Unit1]
-FileName=..\..\..\..\..\Git\Mario_MaVio_Things\PacMan\2010-1056\PacMan\PacMan-main.c
+FileName=..\..\2010-1056\PacMan\PacMan-main.c
 CompileCpp=0
 Folder=
 Compile=1
@@ -71,7 +71,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit2]
-FileName=..\..\..\..\..\Git\Mario_MaVio_Things\PacMan\2010-1056\PacMan\PacManFunction.h
+FileName=..\..\2010-1056\PacMan\PacManFunction.h
 CompileCpp=0
 Folder=
 Compile=1
