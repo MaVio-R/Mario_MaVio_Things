@@ -375,17 +375,17 @@ void MoveGhosts(int* x, int* y, char ghost)
 		cp_xRed = 8;
 		cp_yRed = 9;
 	}
-	else if(redEaten)
+	else if(pinkEaten)
 		{
 			cp_xRed = 8;
 			cp_yRed = 9;
 		}
-		else if(redEaten)
+		else if(blueEaten)
 			{
 				cp_xRed = 8;
 				cp_yRed = 9;	
 			}
-			else if(redEaten)
+			else if(orangeEaten)
 				{
 					cp_xRed = 8;
 					cp_yRed = 9;	
@@ -442,15 +442,29 @@ void MoveGhosts(int* x, int* y, char ghost)
 	
 }
 
+//////////////////qua sto facendo il controllo per per la morte di pacman e la mangiata dei fantasmi dopo aver toccato il frutto
+
+
 void up()
 {
-	if(map[cp_y - 1][cp_x] != '#')
+	if( (map[cp_y - 1][cp_x] == 'R') || (map[cp_y - 1][cp_x] == 'O') || (map[cp_y - 1][cp_x] == 'B')|| (map[cp_y - 1][cp_x] == 'P'))
 	{
-		map[cp_y - 1][cp_x] == '.' ? score+= 10 : (score = score);
-				
-		map[cp_y][cp_x] = ' ';
-		map[cp_y -= 1][cp_x] = 'C';
+		//if()
+		
+		
+		gameOver();
+		sleep(2);
+		
+		//crea funzione vite e ricaricamento pg
+		
 	}
+	else if(map[cp_y - 1][cp_x] != '#')
+		{
+			map[cp_y - 1][cp_x] == '.' ? score+= 10 : (score = score);
+					
+			map[cp_y][cp_x] = ' ';
+			map[cp_y -= 1][cp_x] = 'C';
+		}
 	
 }
 
@@ -467,7 +481,8 @@ void down()
 
 void left()
 {
-	if( cp_x - 1 != 0 - 1){
+	if( cp_x - 1 != 0 - 1)
+	{
 	    if(map[cp_y][cp_x - 1] != '#')
 		{
 			map[cp_y][cp_x - 1] == '.' ? score+= 10 : (score = score);
@@ -475,7 +490,9 @@ void left()
 		    map[cp_y][cp_x] = ' ';
 		    map[cp_y][cp_x -= 1] = 'C';
 	    }
-	}else{
+	}
+	else
+	{
 	    map[cp_y][0] = ' ';
 		cp_x = COLS - 1;
 		map[cp_y][cp_x] = 'C';
@@ -484,7 +501,8 @@ void left()
 
 void right()
 {
-	if( cp_x + 1 != COLS){
+	if( cp_x + 1 != COLS)
+	{
 	    if(map[cp_y][cp_x + 1] != '#')
 		{
 			map[cp_y][cp_x + 1] == '.' ? score+= 10 : (score = score);
@@ -492,7 +510,9 @@ void right()
 		    map[cp_y][cp_x] = ' ';
 		    map[cp_y][cp_x += 1] = 'C';
 	    }
-	}else{
+	}
+	else
+	{
 	    map[cp_y][COLS  - 1] = ' ';
 		cp_x = 0;
 		map[cp_y][cp_x] = 'C';
@@ -504,13 +524,10 @@ void move()
 	while(click != 27)
 	{
 		click = tolower(getch());
-		char RED = 'R', BLUE = 'B', PINK = 'P', ORANGE = 'O';
 		counter++;
 		
 		if(score >= 700 || score >= 1700)
-			{
-				setFruit();
-			}
+			setFruit();
 		
 		switch(click)
 		{

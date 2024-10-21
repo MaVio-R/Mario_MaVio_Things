@@ -1,16 +1,10 @@
 /*
-	this are the global variable
-*/
-	int click;
-	
-/*
 		THESE ARE THE FUNCTION THAT HAVE THE CONTROL OF THE MAP
 */
 
 // define the dimension of the game pitch	
 	#define ROWS 19 // Y coordinates
-	#define COLS 17 // X coordinates
-
+	#define COLS 18 // X coordinates
 
 // configure the map at the initial condition
 	void initMap(); 
@@ -18,26 +12,6 @@
 // check if the map is correctly constructed
 	void integrityCheck();
 
-// set the border of the map
-	void setBoundry();
-
-// set the walls inside the map
-	void setWalls(); 
-	
-// set the initial position of PacMan
-	void setPacMan();
-
-// set the initial position of the ghosts
-	void setGhost();
-
-// set dots inside the map
-	void setDot();
-// set the fruit in the map
-	void setFruit();
-	
-//
-	void gameOver();
-	
 // show the current state of the map
 	void displayMap();
 
@@ -50,17 +24,14 @@
 
 /* setting the current position (cp) of PacMan
    in particular these are the starting position */
-	int cp_x = 8;
-	int cp_y = 14;
+	int cp_x = 9;
+	int cp_y = 13;
 
 /* this counter is used for the activation of the ghost
    in base of the numper of steps PacMan has done */
 	int counter = 0; 
 	//POSSIBLE SUBJECT TO TOTAL OVERHAUL
 
-/* this counter is the score of the player */
-	int score = 0;
-	
 // move is the function that allow the game to be run
 	void move();
 		
@@ -72,7 +43,7 @@
 		void down();
 		void left();
 		void right();
-	
+		
 /*
 		THESE ARE THE FUNCTION THAT HAVE THE CONTROL OF THE GHOSTS
 */
@@ -84,54 +55,58 @@
 		"objects" like PacMan" */
 		//char tmp;  
 	
-		bool redEaten = false;
-		bool pinkEaten = false;
-		bool blueEaten = false;
-		bool orangeEaten = false; 
-	
 	/*  it needs for the "AI" of the ghosts.
 	 	It is a random number picked in a pool that goes from 1 to 6 
 		that "decide" in which direction the ghosts will go */
 		int odds;
 
-	/*	define a character for each ghost*/
-		char RED = 'R', BLUE = 'B', PINK = 'P', ORANGE = 'O';
-
-
-
 	/* 	these function are the move set of the ghosts
 	    each one of those checks if is possible to 
 	    move in their specified direction and swap
 	    the "object" that occupies that space with the ghost itself */
-		void goUp(int** x, int** y, char ghost);
-		void goDown(int** x, int** y, char ghost);
-		void goLeft(int** x, int** y, char ghost);
-		void goRight(int** x, int** y, char ghost);
+		void goUp(int* x, int* y, char ghost);
+		void goDown(int* x, int* y, char ghost);
+		void goLeft(int* x, int* y, char ghost);
+		void goRight(int* x, int* y, char ghost);
 
 //red
 	/*  setting the current position (cp) of the "RED" ghost
    		in particular these are the starting position */
-		int cp_xRed = 8;
-		int cp_yRed = 7;
+		int cp_xRed = 9;
+		int cp_yRed = 8;
+	
+	/* 	They are the implementation of the previus seen function
+		and they contain the "AI" of the "RED" ghost */
+		void redMove();
 
 //pink
 	/*  setting the current position (cp) of "PINK" ghost
    		in particular these are the starting position */
-		int cp_xPink = 8;
-		int cp_yPink = 9;
+		int cp_xPink = 9;
+		int cp_yPink = 10;
+	
+	/* 	They are the implementation of the previus seen function
+		and they contain the "AI" of the "PINK" ghost */
+		void pinkMove();
 
 //blue
 	/*  setting the current position (cp) of "BLUE" ghost
    		in particular these are the starting position */
-		int cp_xBlue = 7;
-		int cp_yBlue = 9;
+		int cp_xBlue = 8;
+		int cp_yBlue = 10;
 		
+	/* 	They are the implementation of the previus seen function
+		and they contain the "AI" of the "BLUE" ghost */
+		void blueMove();
+
 //orange
 	/*  setting the current position (cp) of "ORANGE" ghost
    		in particular these are the starting position */
-		int cp_xOrange = 9;
-		int cp_yOrange = 9;
+		int cp_xOrange = 10;
+		int cp_yOrange = 10;
 		
 	/* 	They are the implementation of the previus seen function
-		and they contain the "AI" of the ghosts */
-	    void MoveGhosts(int* x, int* y, char ghost);
+		and they contain the "AI" of the "ORANGE" ghost */
+		void orangeMove();
+		
+

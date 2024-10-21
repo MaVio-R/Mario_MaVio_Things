@@ -1,15 +1,15 @@
-# Project: tetris
+# Project: PacMan
 # Makefile created by Dev-C++ 5.11
 
 CPP      = g++.exe
 CC       = gcc.exe
 WINDRES  = windres.exe
-OBJ      = main.o funzioni.o
-LINKOBJ  = main.o funzioni.o
+OBJ      = ../../2010-1056/PacMan/PacMan-main.o
+LINKOBJ  = ../../2010-1056/PacMan/PacMan-main.o
 LIBS     = -L"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib" -L"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/lib" -static-libgcc
 INCS     = -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include"
 CXXINCS  = -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include/c++"
-BIN      = tetris.exe
+BIN      = PacMan.exe
 CXXFLAGS = $(CXXINCS) 
 CFLAGS   = $(INCS) 
 RM       = rm.exe -f
@@ -24,8 +24,5 @@ clean: clean-custom
 $(BIN): $(OBJ)
 	$(CC) $(LINKOBJ) -o $(BIN) $(LIBS)
 
-main.o: main.c
-	$(CC) -c main.c -o main.o $(CFLAGS)
-
-funzioni.o: funzioni.c
-	$(CC) -c funzioni.c -o funzioni.o $(CFLAGS)
+../../2010-1056/PacMan/PacMan-main.o: ../../2010-1056/PacMan/PacMan-main.c
+	$(CC) -c ../../2010-1056/PacMan/PacMan-main.c -o ../../2010-1056/PacMan/PacMan-main.o $(CFLAGS)
