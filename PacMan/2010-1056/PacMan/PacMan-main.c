@@ -449,9 +449,11 @@ void up()
 {
 	if( (map[cp_y - 1][cp_x] == 'R') || (map[cp_y - 1][cp_x] == 'O') || (map[cp_y - 1][cp_x] == 'B')|| (map[cp_y - 1][cp_x] == 'P'))
 	{
-		//if()
+		map[cp_y][cp_x] = ' ';
+		cp_x = 8;
+		cp_y = 14;
 		
-		
+		map[cp_y][cp_x] = 'C';
 		gameOver();
 		sleep(2);
 		
