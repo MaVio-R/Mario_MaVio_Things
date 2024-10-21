@@ -3,6 +3,7 @@
 #include <time.h>
 #include <conio.h>
 #include <ctype.h>
+#include <stdbool.h>
 
 //PacMan
 #include "PacManFunction.h"	
@@ -224,9 +225,20 @@ void integrityCheck()
 	
 }
 
+void gameOver()
+{
+	printf("\033[0;33m   SCORE: %d \n\n", score);
+
+	//LEADERBOARD DA IMPLEMENTARE
+	
+	printf("\033[0;31m\t    GAME \n\t    OVER");
+}
+
 void displayMap()
 {
 	int i, j;
+	
+	printf("\n \t     \033[0;33mPAC-MAN \n \n");
 	
 	for( i=0; i<ROWS; i++)
 	{
@@ -262,52 +274,94 @@ void displayMap()
 		printf("\n");
 	}
 	
-	printf("\n SCORE : %d", score);
+	printf("\n \033[0;36m SCORE : %d ", score);
+	printf("\n\033[0;36mESC per uscire ");
+
+	if(click == 27)
+		{
+			system("cls");
+			gameOver();
+		}
+	
 	//integrityCheck();
 	fflush(stdout);
 }
 
 void goUp(int** x, int** y, char ghost)
 {
-	map[**y][**x] = map[**y - 1][**x];
-	map[**y -= 1 ][**x] = ghost;	
+	if(map[**y - 1][**x] == 'C')
+	{
+		click = 27;
+	}
+	else
+	{
+		map[**y][**x] = map[**y - 1][**x];
+		map[**y -= 1 ][**x] = ghost;	
+	}	
 	
 }
 
 void goDown(int** x, int** y, char ghost)
 {
-	if((**x == 8) && ((**y + 1) == 8)){
-		
-	} else {
-		map[**y][**x] = map[**y + 1][**x];
-		map[**y += 1 ][**x] = ghost;		
+	if(map[**y - 1][**x] == 'C')
+		click = 27;
+	else
+	{
+		if((**x == 8) && ((**y + 1) == 8))
+		{
+			//mi va benissimo
+		} 
+		else 
+		{
+			map[**y][**x] = map[**y + 1][**x];
+			map[**y += 1 ][**x] = ghost;		
+		}	
 	}
 }
 
 void goRight(int** x, int** y, char ghost)
 {
-	if(**x + 1 == COLS ){
-	    map[**y][**x] = map[**y][0];
-	    **x = 0;
-	    map[**y][**x] = ghost;
-	}else{
-	    if(map[**y][**x + 1] != '#'){
-	        map[**y][**x] = map[**y][**x + 1];
-	        map[**y][**x += 1] = ghost;
-	    }
+	if(map[**y - 1][**x] == 'C')
+		click = 27;
+	else
+	{
+		if(**x + 1 == COLS )
+		{
+		    map[**y][**x] = map[**y][0];
+		    **x = 0;
+		    map[**y][**x] = ghost;
+		}
+		else
+		{
+		    if(map[**y][**x + 1] != '#')
+			{
+		        map[**y][**x] = map[**y][**x + 1];
+		        map[**y][**x += 1] = ghost;
+		    }
+		}
 	}
 }
 
 void goLeft(int** x, int** y, char ghost)
-{
-	if(**x == 0){    
-	    map[**y][**x] = map[**y][COLS - 1];
-	    **x = COLS - 1;
-	    map[**y][**x] = ghost;
-	}else {
-		if(map[**y][**x - 1] != '#'){
-    		map[**y][**x] = map[**y][**x - 1];
-	    	map[**y][**x -= 1 ] = ghost;
+{	
+	if(map[**y - 1][**x] == 'C')
+		click = 27;
+	else
+	{
+	
+		if(**x == 0)
+		{    
+		    map[**y][**x] = map[**y][COLS - 1];
+		    **x = COLS - 1;
+		    map[**y][**x] = ghost;
+		}
+		else 
+		{
+			if(map[**y][**x - 1] != '#')
+			{
+	    		map[**y][**x] = map[**y][**x - 1];
+		    	map[**y][**x -= 1 ] = ghost;
+			}
 		}
 	}
 }
@@ -315,53 +369,77 @@ void goLeft(int** x, int** y, char ghost)
 void MoveGhosts(int* x, int* y, char ghost)
 {
 	odds = rand() % (4 - 0 + 1);
-		
-	switch(odds)
+	
+	if(redEaten)
 	{
-		case 1:
-			if( (map[*y - 1][*x] != '#' ) && (map[*y - 1][*x] != 'C') && (map[*y - 1][*x] != 'R') && (map[*y - 1][*x] != 'P') && (map[*y - 1][*x] != 'B') && (map[*y - 1][*x] != 'O'))
-			{
-				goUp(&x, &y, ghost);
-				system("cls");
-				displayMap();
-				break;					
-			}
-			else
-				break;
-			
-		case 4:
-			if((map[*y][*x - 1] != 'C') && (map[*y][*x - 1] != 'R') && (map[*y][*x - 1] != 'P') && (map[*y][*x - 1] != 'B') && (map[*y][*x - 1] != 'O'))
-			{
-				goLeft(&x, &y, ghost);
-				system("cls");
-				displayMap();
-				break;					
-			}
-			else
-				break;
-			
-		case 3:		
-			if( (map[*y][*x + 1] != 'C') && (map[*y][*x + 1] != 'R') && (map[*y][*x + 1] != 'P') && (map[*y][*x + 1] != 'B') && (map[*y][*x + 1] != 'O'))
-			{
-				goRight(&x, &y, ghost);
-				system("cls");
-				displayMap();
-				break;					
-			}
-			else
-				break;
-				
-		case 2:
-			if( (map[*y + 1][*x] != '#')  &&  (map[*y + 1][*x] != 'C') && (map[*y + 1][*x] != 'R') && (map[*y + 1][*x] != 'P') && (map[*y + 1][*x] != 'B') && (map[*y + 1][*x] != 'O') )
-			{
-				goDown(&x, &y, ghost);
-				system("cls");
-				displayMap();
-				break;					
-			}
-			else
-				break;
+		cp_xRed = 8;
+		cp_yRed = 9;
 	}
+	else if(redEaten)
+		{
+			cp_xRed = 8;
+			cp_yRed = 9;
+		}
+		else if(redEaten)
+			{
+				cp_xRed = 8;
+				cp_yRed = 9;	
+			}
+			else if(redEaten)
+				{
+					cp_xRed = 8;
+					cp_yRed = 9;	
+				}
+	else	 
+	{
+		switch(odds)
+		{
+			case 1:
+				if( (map[*y - 1][*x] != '#' ) && (map[*y - 1][*x] != 'R') && (map[*y - 1][*x] != 'P') && (map[*y - 1][*x] != 'B') && (map[*y - 1][*x] != 'O'))
+				{
+					goUp(&x, &y, ghost);
+					system("cls");
+					displayMap();
+					break;					
+				}
+				else
+					break;
+				
+			case 4:
+				if((map[*y][*x - 1] != 'R') && (map[*y][*x - 1] != 'P') && (map[*y][*x - 1] != 'B') && (map[*y][*x - 1] != 'O'))
+				{
+					goLeft(&x, &y, ghost);
+					system("cls");
+					displayMap();
+					break;					
+				}
+				else
+					break;
+				
+			case 3:		
+				if((map[*y][*x + 1] != 'R') && (map[*y][*x + 1] != 'P') && (map[*y][*x + 1] != 'B') && (map[*y][*x + 1] != 'O'))
+				{
+					goRight(&x, &y, ghost);
+					system("cls");
+					displayMap();
+					break;					
+				}
+				else
+					break;
+					
+			case 2:
+				if( (map[*y + 1][*x] != '#')&& (map[*y + 1][*x] != 'R') && (map[*y + 1][*x] != 'P') && (map[*y + 1][*x] != 'B') && (map[*y + 1][*x] != 'O') )
+				{
+					goDown(&x, &y, ghost);
+					system("cls");
+					displayMap();
+					break;					
+				}
+				else
+					break;
+		}	
+	}
+	
 }
 
 void up()
@@ -369,10 +447,11 @@ void up()
 	if(map[cp_y - 1][cp_x] != '#')
 	{
 		map[cp_y - 1][cp_x] == '.' ? score+= 10 : (score = score);
-		
+				
 		map[cp_y][cp_x] = ' ';
 		map[cp_y -= 1][cp_x] = 'C';
 	}
+	
 }
 
 void down()
@@ -422,8 +501,6 @@ void right()
 
 void move()
 {
-	int click;
-	
 	while(click != 27)
 	{
 		click = tolower(getch());
@@ -431,30 +508,10 @@ void move()
 		counter++;
 		
 		if(score >= 700 || score >= 1700)
-			setFruit();
-		
-		
-		if(counter <= 15)
-			MoveGhosts(&cp_xRed, &cp_yRed, RED);
-		else if(counter <= 30)
 			{
-				MoveGhosts(&cp_xRed, &cp_yRed, RED);
-				MoveGhosts(&cp_xPink, &cp_yPink, PINK);
+				setFruit();
 			}
-			else if (counter<= 45)
-				{
-					MoveGhosts(&cp_xRed, &cp_yRed, RED);
-					MoveGhosts(&cp_xPink, &cp_yPink, PINK);
-					MoveGhosts(&cp_xBlue, &cp_yBlue, BLUE);
-				}
-				else
-				{
-					MoveGhosts(&cp_xRed, &cp_yRed, RED);
-					MoveGhosts(&cp_xPink, &cp_yPink, PINK);
-					MoveGhosts(&cp_xBlue, &cp_yBlue, BLUE);
-					MoveGhosts(&cp_xOrange, &cp_yOrange, ORANGE);
-				}
-			
+		
 		switch(click)
 		{
 			case 'w':
@@ -486,6 +543,27 @@ void move()
 				displayMap();
 				break;
 		}
+		
+		if(counter <= 15)
+			MoveGhosts(&cp_xRed, &cp_yRed, RED);
+		else if(counter <= 30)
+			{
+				MoveGhosts(&cp_xRed, &cp_yRed, RED);
+				MoveGhosts(&cp_xPink, &cp_yPink, PINK);
+			}
+			else if (counter<= 45)
+				{
+					MoveGhosts(&cp_xRed, &cp_yRed, RED);
+					MoveGhosts(&cp_xPink, &cp_yPink, PINK);
+					MoveGhosts(&cp_xBlue, &cp_yBlue, BLUE);
+				}
+				else
+				{
+					MoveGhosts(&cp_xRed, &cp_yRed, RED);
+					MoveGhosts(&cp_xPink, &cp_yPink, PINK);
+					MoveGhosts(&cp_xBlue, &cp_yBlue, BLUE);
+					MoveGhosts(&cp_xOrange, &cp_yOrange, ORANGE);
+				}
 	}
 }
 
