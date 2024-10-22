@@ -162,7 +162,6 @@ void setDot()
     map[9][7] = 'B';
     map[9][8] = 'P';
     map[9][9] = 'O';	
-   
 	
 	map[7][1] = ' ';
     map[7][5] = ' ';
@@ -195,9 +194,17 @@ void setDot()
     map[11][15] = ' ';
 }
 
+void setEnergizer()
+{
+	map[3][1] = '_';
+	map[3][15] = '_';
+	map[15][1] = '_';
+	map[15][15] = '_';
+}
+
 void setFruit()
 {
-	map[11][8] = '8';	
+	map[cp_yFruit][cp_xFruit] = '8';	
 }
 
 void initMap()
@@ -207,6 +214,7 @@ void initMap()
 	setGhost();
     setWalls();
     setDot();
+    setEnergizer();
     //energizer + 50
     //cherry + 100
 }
@@ -266,6 +274,9 @@ void displayMap()
 				printf("\033[0;11m%c ", map[i][j]);
 			
 			if(map[i][j] == '8')
+				printf("\033[0;31m%c ", map[i][j]);
+			
+			if(map[i][j] == '_')
 				printf("\033[0;31m%c ", map[i][j]);
 			
 			if(map[i][j] == ' ')
@@ -372,23 +383,40 @@ void MoveGhosts(int* x, int* y, char ghost)
 	
 	if(redEaten)
 	{
+		map[cp_yRed][cp_xRed] = ' ';
+
 		cp_xRed = 8;
 		cp_yRed = 9;
+		
+		map[cp_yRed][cp_xRed] = 'R';
+
 	}
 	else if(pinkEaten)
 		{
-			cp_xRed = 8;
-			cp_yRed = 9;
+			map[cp_yPink][cp_xPink] = ' ';
+			
+			cp_xPink = 8;
+			cp_yPink = 9;
+			
+			map[cp_yPink][cp_xPink] = 'P';
 		}
 		else if(blueEaten)
 			{
-				cp_xRed = 8;
-				cp_yRed = 9;	
+				map[cp_yBlue][cp_xBlue] = ' ';
+				
+				cp_xBlue = 8;
+				cp_yBlue = 9;	
+				
+				map[cp_yBlue][cp_xBlue] = 'B';
 			}
 			else if(orangeEaten)
 				{
-					cp_xRed = 8;
-					cp_yRed = 9;	
+					map[cp_yOrange][cp_xOrange] = ' ';
+					
+					cp_xOrange = 8;
+					cp_yOrange = 9;
+						
+					map[cp_yOrange][cp_xOrange] = 'O';
 				}
 	else	 
 	{
@@ -444,7 +472,6 @@ void MoveGhosts(int* x, int* y, char ghost)
 
 //////////////////qua sto facendo il controllo per per la morte di pacman e la mangiata dei fantasmi dopo aver toccato il frutto
 
-
 void up()
 {
 	if( (map[cp_y - 1][cp_x] == 'R') || (map[cp_y - 1][cp_x] == 'O') || (map[cp_y - 1][cp_x] == 'B')|| (map[cp_y - 1][cp_x] == 'P'))
@@ -463,7 +490,14 @@ void up()
 	else if(map[cp_y - 1][cp_x] != '#')
 		{
 			map[cp_y - 1][cp_x] == '.' ? score+= 10 : (score = score);
-					
+			map[cp_y - 1][cp_x] == '_' ? eatable = true : (score = score);
+			
+			if(map[cp_y - 1][cp_x] == '8')
+			{
+				score+= 100;
+				map[cp_yFruit][cp_xFruit] = ' ';
+				fruitEaten = true;
+			}		
 			map[cp_y][cp_x] = ' ';
 			map[cp_y -= 1][cp_x] = 'C';
 		}
@@ -475,6 +509,14 @@ void down()
 	if(map[cp_y + 1][cp_x] != '#')
 	{
 		map[cp_y + 1][cp_x] == '.' ? score+= 10 : (score = score);
+		map[cp_y + 1][cp_x] == '_' ? eatable = true : (score = score);
+		
+		if(map[cp_y + 1][cp_x] == '8')
+		{
+			score+= 100;
+			map[cp_yFruit][cp_xFruit] = ' ';
+			fruitEaten = true;
+		}
 		
 		map[cp_y][cp_x] = ' ';
 		map[cp_y += 1][cp_x] = 'C';
@@ -488,6 +530,14 @@ void left()
 	    if(map[cp_y][cp_x - 1] != '#')
 		{
 			map[cp_y][cp_x - 1] == '.' ? score+= 10 : (score = score);
+			map[cp_y][cp_x - 1] == '_' ? eatable = true : (score = score);
+			
+			if(map[cp_y][cp_x - 1] == '8')
+			{
+				score+= 100;
+				map[cp_yFruit][cp_xFruit] = ' ';
+				fruitEaten = true;
+			}
 			
 		    map[cp_y][cp_x] = ' ';
 		    map[cp_y][cp_x -= 1] = 'C';
@@ -508,6 +558,14 @@ void right()
 	    if(map[cp_y][cp_x + 1] != '#')
 		{
 			map[cp_y][cp_x + 1] == '.' ? score+= 10 : (score = score);
+			map[cp_y][cp_x +1] == '_' ? eatable = true : (score = score);
+			
+			if(map[cp_y][cp_x + 1] == '8')
+			{
+				score+= 100;
+				map[cp_yFruit][cp_xFruit] = ' ';
+				fruitEaten = true;
+			}
 			
 		    map[cp_y][cp_x] = ' ';
 		    map[cp_y][cp_x += 1] = 'C';
@@ -528,8 +586,17 @@ void move()
 		click = tolower(getch());
 		counter++;
 		
-		if(score >= 700 || score >= 1700)
+		if(score >= 700 && fruitEaten == false)
+		{
 			setFruit();
+		}
+			
+		if(eatable == true)
+		{
+			counter = timeToEat;
+			if(timeToEat+10 == counter)
+				eatable=false;
+		}
 		
 		switch(click)
 		{
