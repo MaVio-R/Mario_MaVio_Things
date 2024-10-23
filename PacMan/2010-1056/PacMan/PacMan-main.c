@@ -36,6 +36,7 @@ void setBoundry()
 
 void setPacMan()
 {
+	//PAC-MAN initial position
 	map[cp_y][cp_x] = 'C';
 }
 
@@ -219,6 +220,7 @@ void initMap()
     //cherry + 100
 }
 
+//Obsolete function
 void integrityCheck()
 {
 	int i, j;
@@ -381,100 +383,118 @@ void MoveGhosts(int* x, int* y, char ghost)
 {
 	odds = rand() % (4 - 0 + 1);
 	
-	if(redEaten)
+
+	switch(odds)
 	{
-		map[cp_yRed][cp_xRed] = ' ';
-
-		cp_xRed = 8;
-		cp_yRed = 9;
-		
-		map[cp_yRed][cp_xRed] = 'R';
-
-	}
-	else if(pinkEaten)
-		{
-			map[cp_yPink][cp_xPink] = ' ';
-			
-			cp_xPink = 8;
-			cp_yPink = 9;
-			
-			map[cp_yPink][cp_xPink] = 'P';
-		}
-		else if(blueEaten)
+		case 1:
+			if( (map[*y - 1][*x] != '#' ) && (map[*y - 1][*x] != 'R') && (map[*y - 1][*x] != 'P') && (map[*y - 1][*x] != 'B') && (map[*y - 1][*x] != 'O'))
 			{
-				map[cp_yBlue][cp_xBlue] = ' ';
-				
-				cp_xBlue = 8;
-				cp_yBlue = 9;	
-				
-				map[cp_yBlue][cp_xBlue] = 'B';
+				goUp(&x, &y, ghost);
+				system("cls");
+				displayMap();
+				break;					
 			}
-			else if(orangeEaten)
-				{
-					map[cp_yOrange][cp_xOrange] = ' ';
-					
-					cp_xOrange = 8;
-					cp_yOrange = 9;
-						
-					map[cp_yOrange][cp_xOrange] = 'O';
-				}
-	else	 
-	{
-		switch(odds)
-		{
-			case 1:
-				if( (map[*y - 1][*x] != '#' ) && (map[*y - 1][*x] != 'R') && (map[*y - 1][*x] != 'P') && (map[*y - 1][*x] != 'B') && (map[*y - 1][*x] != 'O'))
-				{
-					goUp(&x, &y, ghost);
-					system("cls");
-					displayMap();
-					break;					
-				}
-				else
-					break;
+			else
+				break;
+			
+		case 4:
+			if((map[*y][*x - 1] != 'R') && (map[*y][*x - 1] != 'P') && (map[*y][*x - 1] != 'B') && (map[*y][*x - 1] != 'O'))
+			{
+				goLeft(&x, &y, ghost);
+				system("cls");
+				displayMap();
+				break;					
+			}
+			else
+				break;
+			
+		case 3:		
+			if((map[*y][*x + 1] != 'R') && (map[*y][*x + 1] != 'P') && (map[*y][*x + 1] != 'B') && (map[*y][*x + 1] != 'O'))
+			{
+				goRight(&x, &y, ghost);
+				system("cls");
+				displayMap();
+				break;					
+			}
+			else
+				break;
 				
-			case 4:
-				if((map[*y][*x - 1] != 'R') && (map[*y][*x - 1] != 'P') && (map[*y][*x - 1] != 'B') && (map[*y][*x - 1] != 'O'))
-				{
-					goLeft(&x, &y, ghost);
-					system("cls");
-					displayMap();
-					break;					
-				}
-				else
-					break;
-				
-			case 3:		
-				if((map[*y][*x + 1] != 'R') && (map[*y][*x + 1] != 'P') && (map[*y][*x + 1] != 'B') && (map[*y][*x + 1] != 'O'))
-				{
-					goRight(&x, &y, ghost);
-					system("cls");
-					displayMap();
-					break;					
-				}
-				else
-					break;
-					
-			case 2:
-				if( (map[*y + 1][*x] != '#')&& (map[*y + 1][*x] != 'R') && (map[*y + 1][*x] != 'P') && (map[*y + 1][*x] != 'B') && (map[*y + 1][*x] != 'O') )
-				{
-					goDown(&x, &y, ghost);
-					system("cls");
-					displayMap();
-					break;					
-				}
-				else
-					break;
-		}	
-	}
-	
+		case 2:
+			if( (map[*y + 1][*x] != '#')&& (map[*y + 1][*x] != 'R') && (map[*y + 1][*x] != 'P') && (map[*y + 1][*x] != 'B') && (map[*y + 1][*x] != 'O') )
+			{
+				goDown(&x, &y, ghost);
+				system("cls");
+				displayMap();
+				break;					
+			}
+			else
+				break;
+	}	
 }
 
 //////////////////qua sto facendo il controllo per per la morte di pacman e la mangiata dei fantasmi dopo aver toccato il frutto
 
 void up()
 {
-	if( (map[cp_y - 1][cp_x] == 'R') || (map[cp_y - 1][cp_x] == 'O') || (map[cp_y - 1][cp_x] == 'B')|| (map[cp_y - 1][cp_x] == 'P'))
+	if(eatable == true)
+	{
+		switch(map[cp_y - 1][cp_x])
+		{
+			case 'R':
+				map[cp_yRed][cp_xRed] = ' ';
+				cp_xRed = 8;
+				cp_yRed = 8;
+				map[cp_yRed][cp_xRed] = 'R';
+				
+				redEatable = false;
+				
+				ghostEated++;
+				
+				ghostEated != 0 ? score = score + (ghostEated*200) : (score = score);
+				break;
+				
+			case 'P':
+				map[cp_yPink][cp_xPink] = ' ';
+				cp_xPink = 8;
+				cp_yPink = 8;
+				map[cp_yPink][cp_xPink] = 'P';
+
+
+				pinkEatable = false;
+				
+				ghostEated++;
+				
+				ghostEated != 0 ? score = score + (ghostEated*200) : (score = score);
+				break;
+				
+			case 'B':
+				map[cp_yBlue][cp_xBlue] = ' ';
+				cp_xBlue = 8;
+				cp_yBlue = 8;
+				map[cp_yBlue][cp_xBlue] = 'B';
+				
+				blueEatable = false;
+				
+				ghostEated++;
+				
+				ghostEated != 0 ? score = score + (ghostEated*200) : (score = score);
+				break;
+				
+			case 'O':
+				map[cp_yOrange][cp_xOrange] = ' ';
+				cp_xOrange = 8;
+				cp_yOrange = 8;
+				map[cp_yOrange][cp_xOrange] = 'O';
+				orangeEatable = false;
+				
+				ghostEated++;
+				
+				ghostEated != 0 ? score = score + (ghostEated*200) : (score = score);
+				break;
+		}
+	}
+		
+	if( (map[cp_y - 1][cp_x] == 'R') || (map[cp_y - 1][cp_x] == 'O') || (map[cp_y - 1][cp_x] == 'B') || (map[cp_y - 1][cp_x] == 'P'))
 	{
 		map[cp_y][cp_x] = ' ';
 		cp_x = 8;
@@ -501,7 +521,7 @@ void up()
 			map[cp_y][cp_x] = ' ';
 			map[cp_y -= 1][cp_x] = 'C';
 		}
-	
+
 }
 
 void down()
@@ -593,9 +613,22 @@ void move()
 			
 		if(eatable == true)
 		{
+			redEatable = true;
+			pinkEatable = true;
+			blueEatable = true;
+			orangeEatable = true;
+
 			counter = timeToEat;
 			if(timeToEat+10 == counter)
+			{
+				redEatable = false;
+				pinkEatable = false;
+				blueEatable = false;
+				orangeEatable = false;
+				
 				eatable=false;
+				ghostEated = 0;				
+			}
 		}
 		
 		switch(click)
