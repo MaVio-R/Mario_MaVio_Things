@@ -304,7 +304,13 @@ void goUp(int** x, int** y, char ghost)
 {
 	if(map[**y - 1][**x] == 'C')
 	{
-		click = 27;
+		map[cp_y][cp_x] = ' ';
+		cp_x = 8;
+		cp_y = 14;
+		
+		map[cp_y][cp_x] = 'C';
+		gameOver();
+		sleep(2);
 	}
 	else
 	{
@@ -316,8 +322,16 @@ void goUp(int** x, int** y, char ghost)
 
 void goDown(int** x, int** y, char ghost)
 {
-	if(map[**y - 1][**x] == 'C')
-		click = 27;
+	if(map[**y + 1][**x] == 'C')
+	{
+		map[cp_y][cp_x] = ' ';
+		cp_x = 8;
+		cp_y = 14;
+		
+		map[cp_y][cp_x] = 'C';
+		gameOver();
+		sleep(2);
+	}	
 	else
 	{
 		if((**x == 8) && ((**y + 1) == 8))
@@ -334,8 +348,16 @@ void goDown(int** x, int** y, char ghost)
 
 void goRight(int** x, int** y, char ghost)
 {
-	if(map[**y - 1][**x] == 'C')
-		click = 27;
+	if(map[**y][**x + 1] == 'C')
+	{
+		map[cp_y][cp_x] = ' ';
+		cp_x = 8;
+		cp_y = 14;
+		
+		map[cp_y][cp_x] = 'C';
+		gameOver();
+		sleep(2);
+	}	
 	else
 	{
 		if(**x + 1 == COLS )
@@ -357,8 +379,16 @@ void goRight(int** x, int** y, char ghost)
 
 void goLeft(int** x, int** y, char ghost)
 {	
-	if(map[**y - 1][**x] == 'C')
-		click = 27;
+	if(map[**y][**x - 1] == 'C')
+	{
+		map[cp_y][cp_x] = ' ';
+		cp_x = 8;
+		cp_y = 14;
+		
+		map[cp_y][cp_x] = 'C';
+		gameOver();
+		sleep(2);
+	}
 	else
 	{
 	
@@ -433,8 +463,6 @@ void MoveGhosts(int* x, int* y, char ghost)
 		
 	}	
 }
-
-//////////////////qua sto facendo il controllo per per la morte di pacman e la mangiata dei fantasmi dopo aver toccato il frutto
 
 void up()
 {
