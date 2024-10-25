@@ -216,51 +216,24 @@ void initMap()
     setWalls();
     setDot();
     setEnergizer();
+    //energizer + 50
+    //cherry + 100
 }
 
-/*
-			MI STO BLOCCANDO OGNI 3 SECONDI PORCODDIO
-*/
-
-//AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-
-void addPlayer()
+//Obsolete function
+void integrityCheck()
 {
-	printf("\n MAX 3 CHARACTERS \n ");
-
-	leaderboard[i].player.ID = i;
+	int i, j;
 	
-	printf("INSERT NAME: ");
-	scanf("&s", leaderboard[i].player.name);
+	for( i=ROWS; i==ROWS; i++)
+	{
+		for( j=0; j<=COLS; j++)
+		{
+			map[i][j] = '#';
+		}
+	}
 	
-	leaderboard[i].player.points = score;
 }
-
-void sortLeaderboard()
-{
-	//ordina in maniera decrescente
-}
-void readLeaderboard()
-{
-	//copia la classifica dal file
-}
-
-void addToLeaderboard()
-{
-	//aggiunge alla classifica
-}
-
-void writeLeaderboard()
-{
-	//scrive la classifica nel file	
-}
-
-void showLeaderboard()
-{
-	//mostra le prime 15 righe della classifica
-}
-
-//AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 
 void gameOver()
 {
@@ -268,7 +241,7 @@ void gameOver()
 	if(LifeCounter == 0){
 		printf("\n\033[0;33m   SCORE: %d \n\n", score);
 		
-		//dati giocatore
+		//LEADERBOARD DA IMPLEMENTARE
 		
 		printf("\033[0;31m\t    GAME \n\t    OVER");	
 		click = 27;	
@@ -278,56 +251,52 @@ void gameOver()
 
 void displayMap()
 {
-	//Semplificato i colori 
-	//Aggiunto il reset del colore dopo ogni stampa perchè i fantasmi cambiavano colori ai muri
-	//qua dentro non si dovrebbe toccare più niente
-	
 	int i, j;
 	
-	printf("\n \t     \033[33mPAC-MAN \n \n");
+	printf("\n \t     \033[0;33mPAC-MAN \n \n");
 	
 	for( i=0; i<ROWS; i++)
 	{
 		for( j=0; j<COLS; j++)
 		{
 			if(map[i][j] == '#')
-				printf("\033[34m%c \033[0m", map[i][j]);
+				printf("\033[0;34m%c ", map[i][j]);
 			
 			if(map[i][j] == 'C')
-				printf("\033[33m%c \033[0m", map[i][j]);
+				printf("\033[0;33m%c ", map[i][j]);
 				
 			if(map[i][j] == 'R')
 				if(!redEatable)
-					printf("\033[31m%c \033[0m", map[i][j]);
+					printf("\033[0;31m%c ", map[i][j]);
 				else
-					printf("\033[1;34m%c \033[0m", map[i][j]);
+					printf("\033[0;34m%c ", map[i][j]);
 
 			if(map[i][j] == 'P')
 				if(!pinkEatable)
-					printf("\033[1;35m%c \033[0m", map[i][j]);
+					printf("\033[0;201m%c ", map[i][j]);
 				else
-					printf("\033[1;34m%c \033[0m", map[i][j]);
+					printf("\033[0;34m%c ", map[i][j]);
 
 			if(map[i][j] == 'B')
 				if(!blueEatable)
-					printf("\033[36m%c \033[0m", map[i][j]);
+					printf("\033[0;36m%c ", map[i][j]);
 				else
-					printf("\033[1;34m%c \033[0m", map[i][j]);
+					printf("\033[0;34m%c ", map[i][j]);
 
 			if(map[i][j] == 'O')
 				if(!orangeEatable)
-					printf("\033[38;5;202m%c \033[0m", map[i][j]);
+					printf("\033[38;5;202m%c ", map[i][j]);
 				else
-					printf("\033[1;34m%c \033[0m", map[i][j]);
+					printf("\033[0;34m%c ", map[i][j]);
 				
 			if(map[i][j] == '.')
-				printf("\033[0;11m%c \033[0m", map[i][j]);
+				printf("\033[0;11m%c ", map[i][j]);
 			
 			if(map[i][j] == '8')
-				printf("\033[0;31m%c \033[0m", map[i][j]);
+				printf("\033[0;31m%c ", map[i][j]);
 			
 			if(map[i][j] == '_')
-				printf("\033[0;31m%c \033[0m", map[i][j]);
+				printf("\033[0;31m%c ", map[i][j]);
 			
 			if(map[i][j] == ' ')
 				printf("%c ", map[i][j]);
@@ -344,6 +313,7 @@ void displayMap()
 			gameOver();
 		}
 	
+	//integrityCheck();
 	fflush(stdout);
 }
 
@@ -683,6 +653,7 @@ void down()
 		map[cp_y][cp_x] = 'C';
 		gameOver();
 		sleep(2);
+		//crea funzione vite e ricaricamento pg	
 	}
 	
 	if(map[cp_y + 1][cp_x] != '#')
@@ -943,7 +914,7 @@ void move()
 		}
 
 		//RIVEDI STA PARTE CHE HO RISOLTO UN PROBLEMA, MA MI FA ALTAMENTE CAGARE STA PARTE COME L'HO SCRITTA
-		// che ci sta da scrovere meglio ?  va bene così, a funzionare funziona quindi va bene non si puo ottimizzare credo
+
 
 		if(eatable == true && timeToEat == 0)
 		{
@@ -963,30 +934,23 @@ void move()
 			pinkEatable = false;
 			blueEatable = false;
 			orangeEatable = false;
-		
 			timeToEat = 0;
-			
 			eatable=false;
-			
 			ghostEated = 0;				
 		}
-		
 		if(counter <= 15)
 			MoveGhosts(&cp_xRed, &cp_yRed, RED);
-		
 		else if(counter <= 30)
 			{
 				MoveGhosts(&cp_xRed, &cp_yRed, RED);
 				MoveGhosts(&cp_xPink, &cp_yPink, PINK);
 			}
-			
 			else if (counter<= 45)
 				{
 					MoveGhosts(&cp_xRed, &cp_yRed, RED);
 					MoveGhosts(&cp_xPink, &cp_yPink, PINK);
 					MoveGhosts(&cp_xBlue, &cp_yBlue, BLUE);
 				}
-			
 				else
 				{
 					MoveGhosts(&cp_xRed, &cp_yRed, RED);

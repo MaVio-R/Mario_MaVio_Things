@@ -3,32 +3,6 @@
 */
 	int click;
 	
-	#define MAX_NOME 3
-	#define MAX_LEADERBOARD 100
-	
-	typedef char Name[MAX_NOME];
-	
-	typedef struct
-	{
-		int ID;
-		int tablePosition;
-		Name name;
-		int points;
-	} _player;
-	
-	typedef struct
-	{
-		_player player;
-	} _table[MAX_LEADERBOARD];
-	
-	_table leaderboard; 
-	
-	void addPlayer();
-	void sortLeaderboard();
-	void readLeaderboard();
-	void addToLeaderboard();
-	void writeLeaderboard();
-	void showLeaderboard();
 /*
 		THESE ARE THE FUNCTION THAT HAVE THE CONTROL OF THE MAP
 */
