@@ -240,6 +240,7 @@ void sortLeaderboard()
 {
 	//ordina in maniera decrescente
 }
+
 void readLeaderboard()
 {
 	//copia la classifica dal file
@@ -279,10 +280,9 @@ void gameOver()
 void displayMap()
 {
 	//Semplificato i colori 
-	//Aggiunto il reset del colore dopo ogni stampa perchè i fantasmi cambiavano colori ai muri
-	//qua dentro non si dovrebbe toccare più niente
+	//Aggiunto il reset del colore dopo ogni stampa perchï¿½ i fantasmi cambiavano colori ai muri
+	//qua dentro non si dovrebbe toccare piï¿½ niente
 	
-	int i, j;
 	
 	printf("\n \t     \033[33mPAC-MAN \n \n");
 	
@@ -943,7 +943,7 @@ void move()
 		}
 
 		//RIVEDI STA PARTE CHE HO RISOLTO UN PROBLEMA, MA MI FA ALTAMENTE CAGARE STA PARTE COME L'HO SCRITTA
-		// che ci sta da scrovere meglio ?  va bene così, a funzionare funziona quindi va bene non si puo ottimizzare credo
+		// che ci sta da scrovere meglio ?  va bene cosï¿½, a funzionare funziona quindi va bene non si puo ottimizzare credo
 
 		if(eatable == true && timeToEat == 0)
 		{

@@ -1,6 +1,8 @@
 /*
 	this are the global variable
 */
+	int i, j;
+
 	int click;
 	
 	#define MAX_NOME 3
