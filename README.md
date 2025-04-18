@@ -1,6 +1,6 @@
 # Mario_MaVio_Things
 
-Welcome to the Mario_MaVio_Things Repository! This is a collaborative project where my friend and I showcase our programming skills by sharing various programs we've created. Whether you're looking for inspiration, learning resources, or just some fun code to explore, you’ve come to the right place!
+Welcome to the Mario_MaVio_Things Repository! This is a collaborative project where my friend and I showcase our programming skills by sharing various programs we've created during our bachelor degree in    Computer Science. Whether you're looking for inspiration, learning resources, or just some fun code to explore, you’ve come to the right place!
 
 ## Table of Contents
 
