@@ -1,6 +1,6 @@
-package org.example;
+package Model;
 
-public class gate {
+public class Gate {
     private String gateNumber;
     private String teminal;
 }

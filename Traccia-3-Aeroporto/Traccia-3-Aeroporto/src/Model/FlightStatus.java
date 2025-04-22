@@ -1,6 +1,6 @@
-package org.example;
+package Model;
 
-public enum flightStatus {
+public enum FlightStatus {
     SCHEDULED,
     BOARDING,
     DEPARTED,

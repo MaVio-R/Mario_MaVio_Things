@@ -1,11 +1,13 @@
-package org.example;
+package Model;
 
-public class flight {
+import static Model.FlightStatus.*;
+
+public class Flight {
     private String flightCode;
     private String flightCompany;
     private String date;
     private String departureTime;
-    private flightStatus status;
+    private FlightStatus status;
     private boolean delayed;
     private String destinationAirport;
     private String departureAirport;
