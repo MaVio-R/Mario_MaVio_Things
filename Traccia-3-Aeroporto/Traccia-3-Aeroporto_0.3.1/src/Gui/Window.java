@@ -15,7 +15,7 @@ public class Window {
 
         MainPanel mainPanel = new MainPanel(panelContainer );
         LoginPanel loginPanel = new LoginPanel(panelContainer);
-        RegistrationPanel registrationPanel = new RegistrationPanel(panelContainer, frame);
+        RegistrationPanel registrationPanel = new RegistrationPanel(panelContainer);
         DashboardPanel dashboardPanel = new DashboardPanel(panelContainer);
 
         // Add panels to card layout
@@ -24,41 +24,6 @@ public class Window {
         panelContainer.add(registrationPanel, "registration");
         panelContainer.add(dashboardPanel, "dashboard");
 
-
-
-
-
-        // Gestione pulsanti
-        mainLoginButton.addActionListener(e -> {
-            CardLayout cl = (CardLayout) panelContainer.getLayout();
-            cl.show(panelContainer, "login");
-        });
-
-        mainRegistrationButton.addActionListener(e -> {
-            CardLayout cl = (CardLayout) panelContainer.getLayout();
-            cl.show(panelContainer, "registration");
-        });
-
-        loginConfirmButton.addActionListener(e -> {
-            CardLayout cl = (CardLayout) panelContainer.getLayout();
-            cl.show(panelContainer, "dashboard");
-        });
-
-        registrationConfirmButton.addActionListener(e -> {
-            String pwd1 = new String(regPasswordField.getPassword());
-            String pwd2 = new String(regRepeatPasswordField.getPassword());
-            if (!pwd1.equals(pwd2)) {
-                JOptionPane.showMessageDialog(frame, "Le password non corrispondono!", "Errore", JOptionPane.ERROR_MESSAGE);
-            } else {
-                CardLayout cl = (CardLayout) panelContainer.getLayout();
-                cl.show(panelContainer, "dashboard");
-            }
-        });
-
-        logoutButton.addActionListener(e -> {
-            CardLayout cl = (CardLayout) panelContainer.getLayout();
-            cl.show(panelContainer, "main");
-        });
 
         frame.add(panelContainer);
         frame.setLocationRelativeTo(null);
