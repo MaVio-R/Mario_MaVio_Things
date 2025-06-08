@@ -10,4 +10,5 @@
         <maven.compiler.release>24</maven.compiler.release>
         <exec.mainClass>com.mycompany.aereoporto2.Aereoporto2</exec.mainClass>
     </properties>
+    <name>Aereoporto</name>
 </project>
