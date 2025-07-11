@@ -5,7 +5,8 @@
 package Gui.admin;
 
 import java.awt.CardLayout;
-import javax.swing.JPanel;
+import javax.swing.*;
+import java.sql.*;
 /**
  *
  * @author mlaur
@@ -35,9 +36,9 @@ public class HomePageAdmin extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        UpdateFlight = new javax.swing.JButton();
+        NewFlight = new javax.swing.JButton();
+        UpdateLost = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
 
         setPreferredSize(new java.awt.Dimension(1000, 800));
@@ -109,33 +110,33 @@ public class HomePageAdmin extends javax.swing.JPanel {
         jTable1.setGridColor(new java.awt.Color(30, 40, 69));
         jScrollPane1.setViewportView(jTable1);
 
-        jButton3.setBackground(new java.awt.Color(224, 230, 237));
-        jButton3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jButton3.setForeground(new java.awt.Color(0, 0, 0));
-        jButton3.setText("AGGIORNA VOLO");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        UpdateFlight.setBackground(new java.awt.Color(224, 230, 237));
+        UpdateFlight.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        UpdateFlight.setForeground(new java.awt.Color(0, 0, 0));
+        UpdateFlight.setText("AGGIORNA VOLO");
+        UpdateFlight.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                UpdateFlightActionPerformed(evt);
             }
         });
 
-        jButton4.setBackground(new java.awt.Color(224, 230, 237));
-        jButton4.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jButton4.setForeground(new java.awt.Color(0, 0, 0));
-        jButton4.setText("NUOVO VOLO");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        NewFlight.setBackground(new java.awt.Color(224, 230, 237));
+        NewFlight.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        NewFlight.setForeground(new java.awt.Color(0, 0, 0));
+        NewFlight.setText("NUOVO VOLO");
+        NewFlight.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                NewFlightActionPerformed(evt);
             }
         });
 
-        jButton5.setBackground(new java.awt.Color(224, 230, 237));
-        jButton5.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jButton5.setForeground(new java.awt.Color(0, 0, 0));
-        jButton5.setText("AGGIORNA SMARRITI");
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
+        UpdateLost.setBackground(new java.awt.Color(224, 230, 237));
+        UpdateLost.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        UpdateLost.setForeground(new java.awt.Color(0, 0, 0));
+        UpdateLost.setText("AGGIORNA SMARRITI");
+        UpdateLost.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
+                UpdateLostActionPerformed(evt);
             }
         });
 
@@ -154,9 +155,9 @@ public class HomePageAdmin extends javax.swing.JPanel {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, 233, Short.MAX_VALUE))
+                            .addComponent(NewFlight, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(UpdateFlight, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(UpdateLost, javax.swing.GroupLayout.DEFAULT_SIZE, 233, Short.MAX_VALUE))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(jScrollPane1)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -173,11 +174,11 @@ public class HomePageAdmin extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 411, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(NewFlight, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(UpdateFlight, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(UpdateLost, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(50, Short.MAX_VALUE))
         );
 
@@ -189,27 +190,27 @@ public class HomePageAdmin extends javax.swing.JPanel {
         cl.show(container, "main");
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void UpdateFlightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UpdateFlightActionPerformed
         CardLayout cl = (CardLayout) container.getLayout();
         cl.show(container, "flightupdate");
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_UpdateFlightActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    private void NewFlightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NewFlightActionPerformed
         CardLayout cl = (CardLayout) container.getLayout();
         cl.show(container, "newflightpage");
-    }//GEN-LAST:event_jButton4ActionPerformed
+    }//GEN-LAST:event_NewFlightActionPerformed
 
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+    private void UpdateLostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UpdateLostActionPerformed
         CardLayout cl = (CardLayout) container.getLayout();
         cl.show(container, "lostupdate");
-    }//GEN-LAST:event_jButton5ActionPerformed
+    }//GEN-LAST:event_UpdateLostActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton NewFlight;
+    private javax.swing.JButton UpdateFlight;
+    private javax.swing.JButton UpdateLost;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;

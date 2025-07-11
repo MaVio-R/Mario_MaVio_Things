@@ -5,7 +5,8 @@
 package Gui.admin;
 
 import java.awt.CardLayout;
-import javax.swing.JPanel;
+import javax.swing.*;
+import java.sql.*;
 
 /**
  *

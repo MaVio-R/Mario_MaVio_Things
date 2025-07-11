@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
 package Gui;
+import aeroportonapoli.Connectionz;
 import java.awt.CardLayout;
 import javax.swing.*;
 import java.sql.*;
@@ -135,7 +136,7 @@ public class Login extends javax.swing.JPanel {
                         .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 371, Short.MAX_VALUE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(387, 387, 387)
                 .addComponent(LogBut, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -153,9 +154,9 @@ public class Login extends javax.swing.JPanel {
                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(pass, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(135, 135, 135)
+                .addGap(76, 76, 76)
                 .addComponent(LogBut, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(182, Short.MAX_VALUE))
+                .addContainerGap(241, Short.MAX_VALUE))
         );
 
         add(jPanel1, java.awt.BorderLayout.CENTER);
@@ -167,54 +168,68 @@ public class Login extends javax.swing.JPanel {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void LogButActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LogButActionPerformed
-        String un = user.getText().trim();
-    String pw = new String(pass.getPassword()).trim();
+       String un = user.getText().trim();
+       String pw = new String(pass.getPassword()).trim();
 
-    if (un.isEmpty() || pw.isEmpty()) {
-        JOptionPane.showMessageDialog(this,
-                "Tutti i campi devono essere compilati",
-                "Errore",
-                JOptionPane.ERROR_MESSAGE);
-        return;
-    }
+       // Controllo campi vuoti
+       if (un.isEmpty() || pw.isEmpty()) {
+           JOptionPane.showMessageDialog(this,
+                   "Tutti i campi devono essere compilati.",
+                   "Errore",
+                   JOptionPane.ERROR_MESSAGE);
+           return;
+       }
 
-    try {
-        con = Connectionz.getConnection();
+       Connection con = null;
+       PreparedStatement pst = null;
+       ResultSet rs = null;
 
-        String sql = "SELECT * FROM login WHERE username = ? AND password = ?";
-        pst = con.prepareStatement(sql);
-        pst.setString(1, un);
-        pst.setString(2, pw);
-        rs = pst.executeQuery();
+       try {
+           con = Connectionz.getConnection();
 
-        if (rs.next()) {
-            boolean isAdmin = rs.getBoolean("admin"); // legge il valore booleano dalla colonna "admin"
+           // Verifica credenziali
+           String sql = "SELECT * FROM user WHERE username = ? AND password = ?";
+           pst = con.prepareStatement(sql);
+           pst.setString(1, un);
+           pst.setString(2, pw); // In futuro: usare password hash
+           rs = pst.executeQuery();
 
-            CardLayout cl = (CardLayout) container.getLayout();
+           if (rs.next()) {
+               boolean isAdmin = rs.getBoolean("admin");
 
-            if (isAdmin) {
-                cl.show(container, "homepageadmin");
-            } else {
-                cl.show(container, "homepageclient");
-            }
-        } else {
-            JOptionPane.showMessageDialog(this,
-                    "Username o password errati",
-                    "Login fallito",
-                    JOptionPane.ERROR_MESSAGE);
-        }
+               // Accesso riuscito
+               JOptionPane.showMessageDialog(this,
+                       "Login effettuato con successo!",
+                       "Successo",
+                       JOptionPane.INFORMATION_MESSAGE);
 
-    } catch (SQLException ex) {
-        ex.printStackTrace();
-        JOptionPane.showMessageDialog(this,
-                "Errore database: " + ex.getMessage(),
-                "Errore",
-                JOptionPane.ERROR_MESSAGE);
-    } finally {
-        try { if (rs != null) rs.close(); } catch (SQLException ignored) {}
-        try { if (pst != null) pst.close(); } catch (SQLException ignored) {}
-        try { if (con != null) con.close(); } catch (SQLException ignored) {}
-    }
+               CardLayout cl = (CardLayout) container.getLayout();
+               if (isAdmin) {
+                   cl.show(container, "homepageadmin");
+               } else {
+                   cl.show(container, "homepageclient");
+               }
+
+           } else {
+               // Credenziali errate
+               JOptionPane.showMessageDialog(this,
+                       "Username o password errati. Riprova.",
+                       "Login fallito",
+                       JOptionPane.ERROR_MESSAGE);
+           }
+
+       } catch (SQLException ex) {
+           ex.printStackTrace();
+           JOptionPane.showMessageDialog(this,
+                   "Errore del database: " + ex.getMessage(),
+                   "Errore",
+                   JOptionPane.ERROR_MESSAGE);
+       } finally {
+           // Chiusura risorse
+           try { if (rs != null) rs.close(); } catch (SQLException ignored) {}
+           try { if (pst != null) pst.close(); } catch (SQLException ignored) {}
+           try { if (con != null) con.close(); } catch (SQLException ignored) {}
+       }
     }//GEN-LAST:event_LogButActionPerformed
 
 

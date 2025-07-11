@@ -4,6 +4,7 @@
  */
 package Gui;
 
+import aeroportonapoli.Connectionz;
 import java.awt.CardLayout;
 import javax.swing.*;
 import java.sql.*;
@@ -26,33 +27,6 @@ public class HomePage extends javax.swing.JPanel {
         loadFlightData();
     }
 
-    private void loadFlightData() {    
-    DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-    model.setRowCount(0); // Pulisce la tabella
-
-    String sql = "SELECT flight_number, flight_status, departure_airport, arrival_airport, planned_time, delay_time FROM flight";
-
-    try {
-        Connection con = Connectionz.getConnection();
-        PreparedStatement pst = con.prepareStatement(sql);
-        ResultSet rs = pst.executeQuery();
-
-        while (rs.next()) {
-            Object[] row = new Object[6];
-            row[0] = rs.getString("flight_number");
-            row[1] = rs.getString("flight_status");
-            row[2] = rs.getString("departure_airport");
-            row[3] = rs.getString("arrival_airport");
-            row[4] = rs.getString("planned_time");
-            row[5] = rs.getString("delay_time");
-            model.addRow(row);
-        }
-
-    } catch (SQLException ex) {
-        ex.printStackTrace();
-        JOptionPane.showMessageDialog(this, "Errore durante il caricamento dei voli: " + ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
-    }
-}
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -68,7 +42,7 @@ public class HomePage extends javax.swing.JPanel {
         jButton2 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        flighttable = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
 
         setLayout(new java.awt.BorderLayout());
@@ -125,8 +99,8 @@ public class HomePage extends javax.swing.JPanel {
                 .addContainerGap(14, Short.MAX_VALUE))
         );
 
-        jTable1.setBackground(new java.awt.Color(224, 230, 237));
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        flighttable.setBackground(new java.awt.Color(224, 230, 237));
+        flighttable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null},
                 {null, null, null, null, null, null},
@@ -146,11 +120,11 @@ public class HomePage extends javax.swing.JPanel {
                 {null, null, null, null, null, null}
             },
             new String [] {
-                "COD VOLO", "STATO VOLO", "PARTENZA", "ARRIVO", "ORARIO", "RITARDO"
+                "flight_number", "status", "PARTENZA", "ARRIVO", "ORARIO", "RITARDO"
             }
         ));
-        jTable1.setGridColor(new java.awt.Color(30, 40, 69));
-        jScrollPane1.setViewportView(jTable1);
+        flighttable.setGridColor(new java.awt.Color(30, 40, 69));
+        jScrollPane1.setViewportView(flighttable);
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(224, 230, 237));
@@ -184,6 +158,34 @@ public class HomePage extends javax.swing.JPanel {
         add(jPanel1, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void loadFlightData() {    
+    DefaultTableModel model = (DefaultTableModel) flighttable.getModel();
+    model.setRowCount(0); // Pulisce la tabella
+
+    String sql = "SELECT flight_number, flight_status, departure_airport, arrival_airport, planned_time, delay_time FROM flight";
+
+    try {
+        Connection con = Connectionz.getConnection();
+        PreparedStatement pst = con.prepareStatement(sql);
+        ResultSet rs = pst.executeQuery();
+
+        while (rs.next()) {
+            Object[] row = new Object[6];
+            row[0] = rs.getString("flight_number");
+            row[1] = rs.getString("flight_status");
+            row[2] = rs.getString("departure_airport");
+            row[3] = rs.getString("arrival_airport");
+            row[4] = rs.getString("planned_time");
+            row[5] = rs.getString("delay_time");
+            model.addRow(row);
+        }
+
+    } catch (SQLException ex) {
+        ex.printStackTrace();
+        JOptionPane.showMessageDialog(this, "Errore durante il caricamento dei voli: " + ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+    }
+}
+    
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         CardLayout cl = (CardLayout) container.getLayout();
         cl.show(container, "login");
@@ -196,6 +198,7 @@ public class HomePage extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTable flighttable;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
@@ -203,6 +206,5 @@ public class HomePage extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
 }

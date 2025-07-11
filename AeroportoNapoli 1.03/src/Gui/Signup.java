@@ -4,6 +4,7 @@
  */
 package Gui;
 
+import aeroportonapoli.Connectionz;
 import java.awt.CardLayout;
 import javax.swing.*;
 import java.sql.*;
@@ -19,7 +20,6 @@ public class Signup extends javax.swing.JPanel {
     
     Connection con;
     PreparedStatement pst;
-    int rowadded;
     ResultSet rs;
     
     private JPanel container;
@@ -145,7 +145,7 @@ public class Signup extends javax.swing.JPanel {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(388, 388, 388))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -181,56 +181,72 @@ public class Signup extends javax.swing.JPanel {
         String pw = new String(pass.getPassword()).trim();
         String newpw = new String(newpass.getPassword()).trim();
 
+        // Controllo campi vuoti
         if (un.isEmpty() || pw.isEmpty() || newpw.isEmpty()) {
             JOptionPane.showMessageDialog(this,
-                    "Tutti i campi devono essere compilati",
+                    "Tutti i campi devono essere compilati.",
                     "Errore",
                     JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        if (!pw.equals(newpw)){
-                JOptionPane.showMessageDialog(this,
-                "Le due password sono sbagliate,riprova",
-                "Errore",
-                JOptionPane.ERROR_MESSAGE);
-        return;
-        }else{
-            
-            try {
-                con = Connectionz.getConnection();
-                String sqlname = "SELECT username FROM login WHERE username = ? ";
-                pst = con.prepareStatement(sqlname);
-                pst.setString(1, un);
-                rs = pst.executeQuery();
-                
-                if (rs.next()) {
-                    // username esiste già
-                    JOptionPane.showMessageDialog(this,
-                        "L'username esiste già",
-                        "Errore",
-                        JOptionPane.ERROR_MESSAGE);
-                    return;
-                } else {
-                    String sql = "INSERT INTO `login` (`id`, `username`, `password`, `admin`) VALUES (NULL, ?, ?, '0');";
-                    pst = con.prepareStatement(sql);
-                    pst.setString(1, un);
-                    pst.setString(2, pw);
-                    rowadded = pst.executeUpdate();
-                CardLayout cl = (CardLayout) container.getLayout();
-                cl.show(container, "homepageclient");
+        // Controllo corrispondenza password
+        if (!pw.equals(newpw)) {
+            JOptionPane.showMessageDialog(this,
+                    "Le due password non coincidono. Riprova.",
+                    "Errore",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
-            }
-            } catch (SQLException ex) {
-                ex.printStackTrace();
+        Connection con = null;
+        PreparedStatement pst = null;
+        ResultSet rs = null;
+
+        try {
+            con = Connectionz.getConnection();
+
+            // Verifica se l'username esiste già
+            String checkUsernameSQL = "SELECT username FROM user WHERE username = ?";
+            pst = con.prepareStatement(checkUsernameSQL);
+            pst.setString(1, un);
+            rs = pst.executeQuery();
+
+            if (rs.next()) {
                 JOptionPane.showMessageDialog(this,
-                        "Errore database: " + ex.getMessage(),
+                        "L'username \"" + un + "\" è già in uso. Scegli un altro.",
                         "Errore",
                         JOptionPane.ERROR_MESSAGE);
-            } finally {
-                try { if (pst != null) pst.close(); } catch (SQLException ignored) {}
-                try { if (con != null) con.close(); } catch (SQLException ignored) {}
+                return;
             }
+
+            // Inserimento nuovo utente
+            String insertSQL = "INSERT INTO user ( username, password, admin) VALUES ( ?, ?, '0')";
+            pst = con.prepareStatement(insertSQL);
+            pst.setString(1, un);
+            pst.setString(2, pw); // In futuro: usare hash
+            pst.executeUpdate();
+
+            JOptionPane.showMessageDialog(this,
+                    "Registrazione avvenuta con successo!",
+                    "Successo",
+                    JOptionPane.INFORMATION_MESSAGE);
+
+            // Passaggio alla schermata "homepageclient"
+            CardLayout cl = (CardLayout) container.getLayout();
+            cl.show(container, "homepageclient");
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this,
+                    "Errore del database: " + ex.getMessage(),
+                    "Errore",
+                    JOptionPane.ERROR_MESSAGE);
+        } finally {
+            // Chiusura risorse
+            try { if (rs != null) rs.close(); } catch (SQLException ignored) {}
+            try { if (pst != null) pst.close(); } catch (SQLException ignored) {}
+            try { if (con != null) con.close(); } catch (SQLException ignored) {}
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 
