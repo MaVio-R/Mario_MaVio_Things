@@ -5,7 +5,9 @@
 package Gui;
 
 import java.awt.CardLayout;
-import javax.swing.JPanel;
+import javax.swing.*;
+import java.sql.*;
+import javax.swing.table.DefaultTableModel;
 /**
  *
  * @author mlaur
@@ -21,8 +23,36 @@ public class HomePage extends javax.swing.JPanel {
     public HomePage(JPanel container) {
         this.container = container;
         initComponents();
+        loadFlightData();
     }
 
+    private void loadFlightData() {    
+    DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+    model.setRowCount(0); // Pulisce la tabella
+
+    String sql = "SELECT flight_number, flight_status, departure_airport, arrival_airport, planned_time, delay_time FROM flight";
+
+    try {
+        Connection con = Connectionz.getConnection();
+        PreparedStatement pst = con.prepareStatement(sql);
+        ResultSet rs = pst.executeQuery();
+
+        while (rs.next()) {
+            Object[] row = new Object[6];
+            row[0] = rs.getString("flight_number");
+            row[1] = rs.getString("flight_status");
+            row[2] = rs.getString("departure_airport");
+            row[3] = rs.getString("arrival_airport");
+            row[4] = rs.getString("planned_time");
+            row[5] = rs.getString("delay_time");
+            model.addRow(row);
+        }
+
+    } catch (SQLException ex) {
+        ex.printStackTrace();
+        JOptionPane.showMessageDialog(this, "Errore durante il caricamento dei voli: " + ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+    }
+}
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
