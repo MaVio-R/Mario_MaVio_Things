@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 14, 2025 at 12:11 PM
+-- Generation Time: Jul 14, 2025 at 05:16 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -31,7 +31,6 @@ CREATE TABLE `booking` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `flight_id` int(11) NOT NULL,
-  `luggage_id` int(11) NOT NULL,
   `booking_number` int(11) NOT NULL,
   `first_name` varchar(255) NOT NULL,
   `last_name` varchar(255) NOT NULL,
@@ -43,8 +42,8 @@ CREATE TABLE `booking` (
 -- Dumping data for table `booking`
 --
 
-INSERT INTO `booking` (`id`, `user_id`, `flight_id`, `luggage_id`, `booking_number`, `first_name`, `last_name`, `seat_number`, `booking_status`) VALUES
-(1, 3, 4, 2, 25, 'ottanio', 'carciofo', 'B4', 'CONFIRMED');
+INSERT INTO `booking` (`id`, `user_id`, `flight_id`, `booking_number`, `first_name`, `last_name`, `seat_number`, `booking_status`) VALUES
+(1, 3, 4, 25, 'ottanio', 'carciofo', 'B4', 'CONFIRMED');
 
 -- --------------------------------------------------------
 
@@ -77,48 +76,6 @@ INSERT INTO `flight` (`id`, `flight_number`, `flight_company`, `scheduled_date`,
 (5, 'B331B', 'MaCheVoliAFare', '2025-12-12', '10:00:00', '08:00:00', 'Bergamo', 'BaiaDomizia', 'N65', 'DIVERTED'),
 (6, 'N933N', 'MaDavveroVuoiVolare', '2025-12-12', '04:45:00', '00:00:00', 'NewYork', 'Napoli', NULL, 'BOARDING'),
 (7, 'B681N', 'MaCheVOliAFAre', '2005-12-24', '18:25:00', NULL, 'Barcellona', 'Napoli', NULL, 'SCHEDULED');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `luggage`
---
-
-CREATE TABLE `luggage` (
-  `id` int(11) NOT NULL,
-  `luggage_number` varchar(255) NOT NULL,
-  `luggage_status` enum('CHECKED_IN','LOADED','IN_TRANSIT','ARRIVED','CLAIMED','LOST','RETURNED','UNKNOWN') NOT NULL DEFAULT 'CHECKED_IN'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `luggage`
---
-
-INSERT INTO `luggage` (`id`, `luggage_number`, `luggage_status`) VALUES
-(2, 'NG75', 'CHECKED_IN');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `report`
---
-
-CREATE TABLE `report` (
-  `id` int(11) NOT NULL,
-  `flight_id` varchar(255) NOT NULL,
-  `luggage_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `report_code` varchar(255) NOT NULL,
-  `report_description` varchar(255) NOT NULL,
-  `report_time` date NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `report`
---
-
-INSERT INTO `report` (`id`, `flight_id`, `luggage_id`, `user_id`, `report_code`, `report_description`, `report_time`) VALUES
-(1, '4', 1, 3, 'B64G', 'il bagaglio è stato perso nel volo per rimini', '2025-07-16');
 
 -- --------------------------------------------------------
 
@@ -161,18 +118,6 @@ ALTER TABLE `flight`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `luggage`
---
-ALTER TABLE `luggage`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `report`
---
-ALTER TABLE `report`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Indexes for table `user`
 --
 ALTER TABLE `user`
@@ -193,18 +138,6 @@ ALTER TABLE `booking`
 --
 ALTER TABLE `flight`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
-
---
--- AUTO_INCREMENT for table `luggage`
---
-ALTER TABLE `luggage`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
---
--- AUTO_INCREMENT for table `report`
---
-ALTER TABLE `report`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `user`
