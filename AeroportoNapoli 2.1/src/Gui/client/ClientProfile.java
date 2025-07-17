@@ -2,16 +2,12 @@ package Gui.client;
 
 import controller.*;
 import javax.swing.*;
-import controller.Controller;
-import model.BookingStatus;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import javax.swing.table.DefaultTableModel;
 
 public class ClientProfile extends BasePanel implements Resettable{
+
+    private String savedBookingCode;
 
     public ClientProfile(JPanel container,PanelController panelController) {
         super(container, panelController);
@@ -19,14 +15,13 @@ public class ClientProfile extends BasePanel implements Resettable{
     }
 
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
+        LogoutButton = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
+        HomeButton = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
         jPanel8 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
@@ -37,12 +32,9 @@ public class ClientProfile extends BasePanel implements Resettable{
         jPanel5 = new javax.swing.JPanel();
         LastNameChanged = new javax.swing.JTextField();
         SaveChangesButton = new javax.swing.JButton();
-        jPanel16 = new javax.swing.JPanel();
-        BookCode = new javax.swing.JTextField();
         jLabel24 = new javax.swing.JLabel();
         BookCodeSearchButton = new javax.swing.JButton();
         CancelBookCodeSearch = new javax.swing.JButton();
-        jLabel25 = new javax.swing.JLabel();
         edit = new javax.swing.JLabel();
         jLabel26 = new javax.swing.JLabel();
         CancelNameSearch = new javax.swing.JButton();
@@ -65,12 +57,12 @@ public class ClientProfile extends BasePanel implements Resettable{
         jPanel2.setBackground(new java.awt.Color(30, 40, 69));
         jPanel2.setPreferredSize(new java.awt.Dimension(1000, 70));
 
-        jButton1.setBackground(new java.awt.Color(224, 230, 237));
-        jButton1.setForeground(new java.awt.Color(0, 0, 0));
-        jButton1.setText("Esci");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        LogoutButton.setBackground(new java.awt.Color(224, 230, 237));
+        LogoutButton.setForeground(new java.awt.Color(0, 0, 0));
+        LogoutButton.setText("Esci");
+        LogoutButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                LogoutButtonActionPerformed(evt);
             }
         });
 
@@ -78,12 +70,12 @@ public class ClientProfile extends BasePanel implements Resettable{
         jLabel1.setForeground(new java.awt.Color(224, 230, 237));
         jLabel1.setText("AEROPORTO DI NAPOLI");
 
-        jButton2.setBackground(new java.awt.Color(224, 230, 237));
-        jButton2.setForeground(new java.awt.Color(0, 0, 0));
-        jButton2.setText("Home");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        HomeButton.setBackground(new java.awt.Color(224, 230, 237));
+        HomeButton.setForeground(new java.awt.Color(0, 0, 0));
+        HomeButton.setText("Home");
+        HomeButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                HomeButtonActionPerformed(evt);
             }
         });
 
@@ -93,11 +85,11 @@ public class ClientProfile extends BasePanel implements Resettable{
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(HomeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(25, 25, 25)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(LogoutButton, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(15, 15, 15))
         );
         jPanel2Layout.setVerticalGroup(
@@ -106,8 +98,8 @@ public class ClientProfile extends BasePanel implements Resettable{
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(HomeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(LogoutButton, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(14, Short.MAX_VALUE))
         );
 
@@ -162,33 +154,16 @@ public class ClientProfile extends BasePanel implements Resettable{
 
         SaveChangesButton.setForeground(new java.awt.Color(0, 0, 0));
         SaveChangesButton.setText("SALVA MODIFICA");
-        SaveChangesButton.addActionListener(this::SaveChangesButtonActionPerformed);
-
-        javax.swing.GroupLayout jPanel16Layout = new javax.swing.GroupLayout(jPanel16);
-        jPanel16.setLayout(jPanel16Layout);
-        jPanel16Layout.setHorizontalGroup(
-            jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(BookCode, javax.swing.GroupLayout.DEFAULT_SIZE, 202, Short.MAX_VALUE)
-        );
-        jPanel16Layout.setVerticalGroup(
-            jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(BookCode, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
-        );
 
         jLabel24.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel24.setForeground(new java.awt.Color(224, 230, 237));
-        jLabel24.setText("Digitando il nome si potranno avere tutti i biglietti sotto il medesimo");
+        jLabel24.setText("Digiti il nominativo dei biglietti da visualizzare");
 
         BookCodeSearchButton.setForeground(new java.awt.Color(0, 0, 0));
         BookCodeSearchButton.setText("CERCA");
-        BookCodeSearchButton.addActionListener(this::BookCodeSearchButtonActionPerformed);
 
         CancelBookCodeSearch.setForeground(new java.awt.Color(0, 0, 0));
         CancelBookCodeSearch.setText("ANNULLA RICERCA");
-        CancelBookCodeSearch.addActionListener(this::CancelBookCodeSearchActionPerformed);
-
-        jLabel25.setForeground(new java.awt.Color(224, 230, 237));
-        jLabel25.setText("COD BIGLIETTO");
 
         edit.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         edit.setForeground(new java.awt.Color(224, 230, 237));
@@ -196,19 +171,14 @@ public class ClientProfile extends BasePanel implements Resettable{
 
         jLabel26.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel26.setForeground(new java.awt.Color(224, 230, 237));
-        jLabel26.setText("Digitando il codice biglietto si potrà modificare il proprietario del biglietto");
+        jLabel26.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel26.setText("Selezioni sulla tabella la riga del biglietto da modificare o confermare");
 
         CancelNameSearch.setForeground(new java.awt.Color(0, 0, 0));
         CancelNameSearch.setText("ANNULLA RICERCA");
-        CancelNameSearch.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                CancelNameSearchActionPerformed(evt);
-            }
-        });
 
         NameSearchButton.setForeground(new java.awt.Color(0, 0, 0));
         NameSearchButton.setText("CERCA");
-        NameSearchButton.addActionListener(this::NameSearchButtonActionPerformed);
 
         javax.swing.GroupLayout jPanel17Layout = new javax.swing.GroupLayout(jPanel17);
         jPanel17.setLayout(jPanel17Layout);
@@ -237,15 +207,6 @@ public class ClientProfile extends BasePanel implements Resettable{
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel16, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel25, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(CancelBookCodeSearch, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(BookCodeSearchButton, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(79, 79, 79))
-                    .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel6Layout.createSequentialGroup()
                                 .addGap(146, 146, 146)
                                 .addComponent(SaveChangesButton, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -268,7 +229,13 @@ public class ClientProfile extends BasePanel implements Resettable{
                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(CancelNameSearch, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(NameSearchButton, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(81, 81, 81))))
+                        .addGap(81, 81, 81))
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addComponent(BookCodeSearchButton, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(CancelBookCodeSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(90, 90, 90))))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -282,25 +249,19 @@ public class ClientProfile extends BasePanel implements Resettable{
                         .addComponent(jLabel27)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jPanel17, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(28, 28, 28))
+                        .addGap(40, 40, 40))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(NameSearchButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(CancelNameSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)))
+                        .addGap(30, 30, 30)))
                 .addComponent(jLabel26, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(31, 31, 31)
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addComponent(jLabel25)
-                        .addGap(18, 18, 18)
-                        .addComponent(jPanel16, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addComponent(BookCodeSearchButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(CancelBookCodeSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(47, 47, 47)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(BookCodeSearchButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(CancelBookCodeSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(25, 25, 25)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addComponent(edit, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -336,25 +297,20 @@ public class ClientProfile extends BasePanel implements Resettable{
             .addComponent(jLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
         );
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
-            },
-            new String [] {
-                "BOOK COD", "NOME", "FLIGHT COD", "STATUS", "SEAT NUM"
-            }
+        jTable1.setModel(new DefaultTableModel(
+                new Object [][] {}, // La tabella parte vuota
+                new String [] {      // Intestazioni di colonna
+                        "BOOK COD", "NOME", "FLIGHT COD", "STATUS", "SEAT NUM"
+                }
         ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, true
-            };
+            boolean[] canEdit = new boolean [] { false, false, false, false, false };
 
+            @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
+                return canEdit[columnIndex];
             }
         });
+
         jTable1.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(jTable1);
 
@@ -380,7 +336,6 @@ public class ClientProfile extends BasePanel implements Resettable{
         CheckInButton.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
         CheckInButton.setForeground(new java.awt.Color(0, 0, 0));
         CheckInButton.setText("CHECK IN");
-        CheckInButton.addActionListener(this::CheckInButtonActionPerformed);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -413,296 +368,273 @@ public class ClientProfile extends BasePanel implements Resettable{
                     .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(51, Short.MAX_VALUE))
         );
+            // ... (altri componenti inizializzati)
 
+            LogoutButton.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    LogoutButtonActionPerformed(evt);
+                }
+            });
+
+            HomeButton.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    HomeButtonActionPerformed(evt);
+                }
+            });
+
+            NameSearchButton.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    NameSearchButtonActionPerformed(evt);
+                }
+            });
+
+            CancelNameSearch.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    CancelNameSearchActionPerformed(evt);
+                }
+            });
+
+            BookCodeSearchButton.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    BookCodeSearchButtonActionPerformed(evt);
+                }
+            });
+
+            CancelBookCodeSearch.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    CancelBookCodeSearchActionPerformed(evt);
+                }
+            });
+
+            SaveChangesButton.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    SaveChangesButtonActionPerformed(evt);
+                }
+            });
+
+            CheckInButton.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    CheckInButtonActionPerformed(evt);
+                }
+            });
+
+            // ... (restanti inizializzazioni)
         add(jPanel1, java.awt.BorderLayout.CENTER);
-    }// </editor-fold>//GEN-END:initComponents
+    }
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void LogoutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LogoutButtonActionPerformed
         panelController.showPanel("main");
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void HomeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_HomeButtonActionPerformed
         panelController.showPanel("homepageclient");
-    }      //GEN-LAST:event_jButton2ActionPerformed
+    }
 
-    private void NameSearchButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        // Ottieni il nome dal campo di testo
-        String firstName = FirstName.getText().trim();
+    private void NameSearchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NameSearchButtonActionPerformed
+        // Recupera il testo dalla casella "FirstName"
+        String name = FirstName.getText().trim();
 
-        // Verifica che il campo non sia vuoto
-        if (firstName.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Inserisci un nome per effettuare la ricerca.", "Errore", JOptionPane.ERROR_MESSAGE);
+        // Controlla che il nome non sia vuoto
+        if (name.isEmpty()) {
+            JOptionPane.showMessageDialog(this,
+                    "Per favore, inserisci un nome nel campo di ricerca.",
+                    "Campo vuoto", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        // Carica i dati delle prenotazioni basati sul nome
-        loadBookingsByName(firstName);
+        // Utilizza il metodo del controller per caricare i risultati nella tabella
+        Controller.loadBookingsByName(jTable1, name);
+
+        // Messaggio di feedback (opzionale)
+        if (jTable1.getRowCount() == 0) {
+            JOptionPane.showMessageDialog(this,
+                    "Nessuna prenotazione trovata per il nome \"" + name + "\".",
+                    "Risultato della ricerca", JOptionPane.INFORMATION_MESSAGE);
+        }
     }
 
-    private void CancelNameSearchActionPerformed(java.awt.event.ActionEvent evt) {
-        // Svuota il campo di testo del nome
+    private void CancelNameSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelNameSearchActionPerformed
+        // Riporta la tabella al suo stato originale caricando tutte le prenotazioni dell'utente loggato
+        Controller.loadBookingsForCurrentUser(jTable1);
+
+        // Svuota il campo di testo FirstName
         FirstName.setText("");
 
-        // Ripristina i dati originali nella tabella
-        loadUserBookings();
     }
 
-    @Override
-    public void resetPanel() {
-        loadUserBookings();
-    }
-
-    // Metodo per caricare le prenotazioni dell'utente
-    private void loadUserBookings() {
-        int userId = AeroportoNapoli.LoggedUser.getUserId(); // Ottieni l'ID dell'utente loggato
-        String query = "SELECT booking_number, first_name, flight_id, booking_status, seat_number "
-                     + "FROM booking WHERE user_id = ?";
-
+    private void BookCodeSearchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BookCodeSearchButtonActionPerformed
+        // Ottenere il modello della tabella
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        model.setRowCount(0); // Pulisce la tabella
 
-        try (Connection con = Controller.getConnection();
-             PreparedStatement pst = con.prepareStatement(query)) {
-
-            pst.setInt(1, userId); // Imposta l'ID dell'utente nella query
-            ResultSet rs = pst.executeQuery();
-
-            while (rs.next()) {
-                // Aggiunge ogni risultato alla tabella
-                model.addRow(new Object[]{
-                    rs.getInt("booking_number"),
-                    rs.getString("first_name"),
-                    rs.getInt("flight_id"),
-                    rs.getString("booking_status"),
-                    rs.getString("seat_number")
-                });
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Errore durante il caricamento delle prenotazioni: " + e.getMessage(),
-                                          "Errore", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
-    // Metodo per caricare le prenotazioni in base al nome
-    private void loadBookingsByName(String firstName) {
-        int userId = AeroportoNapoli.LoggedUser.getUserId(); // Ottieni l'ID dell'utente loggato
-        String query = "SELECT booking_number, first_name, flight_id, booking_status, seat_number "
-                     + "FROM booking WHERE user_id = ? AND first_name = ?";
-
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        model.setRowCount(0); // Pulisce la tabella
-
-        try (Connection con = Controller.getConnection();
-             PreparedStatement pst = con.prepareStatement(query)) {
-
-            pst.setInt(1, userId); // Imposta l'ID utente
-            pst.setString(2, firstName); // Imposta il nome utente
-            ResultSet rs = pst.executeQuery();
-
-            while (rs.next()) {
-                // Aggiunge ogni risultato alla tabella
-                model.addRow(new Object[]{
-                    rs.getInt("booking_number"),
-                    rs.getString("first_name"),
-                    rs.getInt("flight_id"),
-                    rs.getString("booking_status"),
-                    rs.getString("seat_number")
-                });
-            }
-
-            if (model.getRowCount() == 0) {
-                JOptionPane.showMessageDialog(this, "Nessuna prenotazione trovata per il nome specificato.", "Informazione", JOptionPane.INFORMATION_MESSAGE);
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Errore durante la ricerca: " + e.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
-    private void BookCodeSearchButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        // Ottieni la riga selezionata dalla tabella
+        // Controllare se è stata selezionata una riga
         int selectedRow = jTable1.getSelectedRow();
-
-        // Controlla se è stata selezionata una riga
         if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(this, "Seleziona una riga dalla tabella.", "Errore", JOptionPane.WARNING_MESSAGE);
+            // Mostra un messaggio di errore se nessuna riga è selezionata
+            JOptionPane.showMessageDialog(this,
+                    "Selezionare una prenotazione dalla tabella.",
+                    "Errore", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        // Recupera il codice prenotazione dalla colonna corretta (colonna 0 nell'esempio)
-        Object bookingCodeObj = jTable1.getValueAt(selectedRow, 0);
-        if (bookingCodeObj == null) {
-            JOptionPane.showMessageDialog(this, "Codice prenotazione non valido.", "Errore", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+        // Recupera il valore del numero di prenotazione dalla colonna "BOOK COD" (assumendo che sia nella prima colonna)
+        String bookingNumberStr = model.getValueAt(selectedRow, 0).toString();
 
-        String bookCode = bookingCodeObj.toString().trim();
+        try {
+            int bookingNumber = Integer.parseInt(bookingNumberStr); // Converte l'input in un numero
+            savedBookingCode = bookingNumberStr; // Salva il codice localmente
 
-        // Query per cercare nella tabella booking
-        String query = "SELECT first_name, last_name FROM booking WHERE booking_number = ?";
+            // Chiamata al Controller per recuperare i dettagli della prenotazione
+            String[] bookingDetails = Controller.getBookingDetailsByNumber(bookingNumber);
 
-        try (Connection con = Controller.getConnection(); // Ottieni connessione al database
-             PreparedStatement pst = con.prepareStatement(query)) {
-
-            // Imposta il codice come parametro nella query
-            pst.setString(1, bookCode);
-
-            // Esegui la query
-            ResultSet rs = pst.executeQuery();
-
-            // Se è trovata una prenotazione
-            if (rs.next()) {
-                // Recupera nome e cognome
-                String firstName = rs.getString("first_name");
-                String lastName = rs.getString("last_name");
-
-                // Imposta i valori nei campi di testo (o usali come preferisci)
-                FirstNameChanged.setText(firstName);  // Aggiorna campo FirstNameChanged
-                LastNameChanged.setText(lastName);    // Aggiorna campo LastNameChanged
-
-            } else {
-                // Mostra messaggio se il codice non corrisponde a nessuna prenotazione
-                JOptionPane.showMessageDialog(this, "Prenotazione non trovata per il codice selezionato.", "Informazione", JOptionPane.INFORMATION_MESSAGE);
+            if (bookingDetails != null) {
+                // Imposta i valori delle caselle di testo
+                FirstNameChanged.setText(bookingDetails[0]); // Nome
+                LastNameChanged.setText(bookingDetails[1]);  // Cognome
+                // Messaggio di feedback opzionale
+                JOptionPane.showMessageDialog(this,
+                        "Prenotazione selezionata: " + bookingNumber,
+                        "Successo", JOptionPane.INFORMATION_MESSAGE);
             }
 
-        } catch (SQLException e) {
-            // Gestione degli errori SQL durante l'esecuzione della query
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Errore durante la ricerca: " + e.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this,
+                    "Errore: il numero di prenotazione deve essere un numero valido.",
+                    "Errore", JOptionPane.ERROR_MESSAGE);
         }
     }
 
-    private void SaveChangesButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        // Ottieni i valori dai campi di input
-        String newFirstName = FirstNameChanged.getText().trim();
-        String newLastName = LastNameChanged.getText().trim();
-        String bookingCode = BookCode.getText().trim();
-
-        // Controlla che i campi non siano vuoti
-        if (newFirstName.isEmpty() || newLastName.isEmpty() || bookingCode.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Assicurarsi che tutti i campi siano compilati.", "Errore", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        // Query per aggiornare i dati della prenotazione
-        String query = "UPDATE booking SET first_name = ?, last_name = ? WHERE booking_number = ?";
-
-        try (Connection con = Controller.getConnection(); // Ottieni connessione al database
-             PreparedStatement pst = con.prepareStatement(query)) {
-
-            // Imposta i valori nella query
-            pst.setString(1, newFirstName);
-            pst.setString(2, newLastName);
-            pst.setString(3, bookingCode);
-
-            // Esegui l'aggiornamento
-            int rowsUpdated = pst.executeUpdate();
-
-            if (rowsUpdated > 0) {
-                // Mostra messaggio di successo
-                JOptionPane.showMessageDialog(this, "Dati aggiornati con successo!", "Successo", JOptionPane.INFORMATION_MESSAGE);
-                resetPanel(); // Aggiorna la tabella
-            } else {
-                // Mostra messaggio se il codice non corrisponde a nessuna prenotazione
-                JOptionPane.showMessageDialog(this, "Nessuna prenotazione trovata per il codice inserito.", "Errore", JOptionPane.ERROR_MESSAGE);
-            }
-
-        } catch (SQLException e) {
-            // Gestione degli errori durante l'esecuzione della query
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Errore durante l'aggiornamento: " + e.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
-        }
+    private void CancelBookCodeSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_HomeButtonActionPerformed
     }
-    //GODO/////////////////////////////////////////////////////
-    private void CheckInButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        // Ottieni la riga selezionata nella tabella
-        int selectedRow = jTable1.getSelectedRow();
 
-        if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(this, "Seleziona una prenotazione dalla tabella.", "Errore", JOptionPane.WARNING_MESSAGE);
+    private void SaveChangesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SaveChangesButtonActionPerformed
+        if (savedBookingCode == null) {
+            JOptionPane.showMessageDialog(this,
+                    "Nessuna prenotazione selezionata. Eseguire la ricerca e selezionare una prenotazione prima di salvare.",
+                    "Errore", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        // Recupera il codice della prenotazione dalla tabella
-        Object bookingCodeObj = jTable1.getValueAt(selectedRow, 0); // Codice della prenotazione nella colonna 0
-        if (bookingCodeObj == null) {
-            JOptionPane.showMessageDialog(this, "Codice prenotazione non valido.", "Errore", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        String bookingCode = bookingCodeObj.toString();
+        try {
+            // Recupera il numero della prenotazione salvato localmente
+            int bookingNumber = Integer.parseInt(savedBookingCode);
 
-        // Recupera lo stato attuale
-        Object currentStatusObj = jTable1.getValueAt(selectedRow, 3); // Colonna 3: stato della prenotazione
-        if (currentStatusObj == null || !currentStatusObj.toString().equalsIgnoreCase(BookingStatus.PENDING.name())) {
-            JOptionPane.showMessageDialog(this, "Solo le prenotazioni in stato 'PENDING' possono essere aggiornate a 'CONFIRMED'.", "Errore", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+            // Recupera i dati modificati dalle caselle di testo
+            String updatedFirstName = FirstNameChanged.getText().trim();
+            String updatedLastName = LastNameChanged.getText().trim();
 
-        // Query per aggiornare lo stato
-        String query = "UPDATE booking SET booking_status = ? WHERE booking_number = ?";
-
-        try (Connection con = Controller.getConnection(); // Ottieni connessione al database
-             PreparedStatement pst = con.prepareStatement(query)) {
-
-            // Imposta i parametri della query
-            pst.setString(1, BookingStatus.CONFIRMED.name()); // Usa l'enum per il nuovo stato
-            pst.setString(2, bookingCode);
-
-            // Esegui l'aggiornamento
-            int rowsUpdated = pst.executeUpdate();
-
-            if (rowsUpdated > 0) {
-                JOptionPane.showMessageDialog(this, "Check-in completato con successo! La prenotazione è ora 'CONFIRMED'.", "Successo", JOptionPane.INFORMATION_MESSAGE);
-                resetPanel(); // Aggiorna i dati nella tabella
-            } else {
-                JOptionPane.showMessageDialog(this, "Errore durante l'aggiornamento. Prenotazione non trovata.", "Errore", JOptionPane.ERROR_MESSAGE);
+            // Controlla se i campi sono vuoti
+            if (updatedFirstName.isEmpty() || updatedLastName.isEmpty()) {
+                JOptionPane.showMessageDialog(this,
+                        "I campi Nome e Cognome non possono essere vuoti.",
+                        "Errore di validazione", JOptionPane.WARNING_MESSAGE);
+                return;
             }
 
-        } catch (SQLException e) {
-            // Gestione errori SQL
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Errore durante il check-in: " + e.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+            // Verifica se ci sono modifiche effettive
+            String[] currentDetails = Controller.getBookingDetailsByNumber(bookingNumber);
+            if (currentDetails != null &&
+                    updatedFirstName.equals(currentDetails[0]) &&
+                    updatedLastName.equals(currentDetails[1])) {
+                JOptionPane.showMessageDialog(this,
+                        "Non ci sono modifiche da salvare.",
+                        "Messaggio", JOptionPane.INFORMATION_MESSAGE);
+                return;
+            }
+
+            // Effettua l'update nel database
+            boolean success = Controller.updateBookingDetails(bookingNumber, updatedFirstName, updatedLastName);
+
+            if (success) {
+                JOptionPane.showMessageDialog(this,
+                        "Modifiche salvate con successo!",
+                        "Successo", JOptionPane.INFORMATION_MESSAGE);
+
+                // Aggiorna la tabella con i dati aggiornati
+                Controller.loadBookingsForCurrentUser(jTable1);
+            } else {
+                JOptionPane.showMessageDialog(this,
+                        "Errore durante il salvataggio delle modifiche.",
+                        "Errore", JOptionPane.ERROR_MESSAGE);
+            }
+
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this,
+                    "Errore: il numero di prenotazione salvato non è valido.",
+                    "Errore", JOptionPane.ERROR_MESSAGE);
         }
     }
 
-private void CancelBookCodeSearchActionPerformed(java.awt.event.ActionEvent evt) {
-    // Svuota i campi di input
-    BookCode.setText("");
-    FirstNameChanged.setText("");
-    LastNameChanged.setText("");
+    private void CheckInButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CheckInButtonActionPerformed
+        try {
+            // Controlla che savedBookingCode non sia null o vuoto
+            if (savedBookingCode != null && !savedBookingCode.isEmpty()) {
+                // Converte savedBookingCode in int
+                int bookingNumber;
+                try {
+                    bookingNumber = Integer.parseInt(savedBookingCode);
+                } catch (NumberFormatException ex) {
+                    // Gestisce errori nella conversione
+                    JOptionPane.showMessageDialog(this,
+                            "Il codice della prenotazione non è valido.",
+                            "Errore", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
 
-    // Ripristina i dati originali nella tabella
-    resetPanel();
-}
+                // Chiama il metodo del controller per aggiornare lo stato
+                boolean isUpdated = Controller.updateBookingStatus(bookingNumber, "CONFIRMED");
+
+                if (isUpdated) {
+                    // Conferma l'aggiornamento all'utente
+                    Controller.loadBookingsForCurrentUser(jTable1);
+
+                    JOptionPane.showMessageDialog(this,
+                            "Stato della prenotazione aggiornato a 'CONFIRMED' con successo!",
+                            "Successo", JOptionPane.INFORMATION_MESSAGE);
+
+                } else {
+                    // Mostra un errore in caso di fallimento
+                    JOptionPane.showMessageDialog(this,
+                            "Errore durante l'aggiornamento dello stato della prenotazione.",
+                            "Errore", JOptionPane.ERROR_MESSAGE);
+                }
+            } else {
+                // Mostra un avviso se il codice non è stato salvato
+                JOptionPane.showMessageDialog(this,
+                        "Errore: nessun codice di prenotazione trovato.",
+                        "Errore", JOptionPane.WARNING_MESSAGE);
+            }
+        } catch (Exception ex) {
+            // Gestisce errori generici
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this,
+                    "Si è verificato un errore: " + ex.getMessage(),
+                    "Errore", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_CheckInButtonActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextField BookCode;
     private javax.swing.JButton BookCodeSearchButton;
     private javax.swing.JButton CancelBookCodeSearch;
     private javax.swing.JButton CancelNameSearch;
     private javax.swing.JButton CheckInButton;
     private javax.swing.JTextField FirstName;
     private javax.swing.JTextField FirstNameChanged;
+    private javax.swing.JButton HomeButton;
     private javax.swing.JTextField LastNameChanged;
+    private javax.swing.JButton LogoutButton;
     private javax.swing.JButton NameSearchButton;
     private javax.swing.JButton SaveChangesButton;
     private javax.swing.JLabel edit;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel24;
-    private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel16;
     private javax.swing.JPanel jPanel17;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -713,5 +645,13 @@ private void CancelBookCodeSearchActionPerformed(java.awt.event.ActionEvent evt)
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
+
+
+
+    @Override
+    public void resetPanel() {
+        Controller.loadBookingsForCurrentUser(jTable1);
+
+    }
     // End of variables declaration//GEN-END:variables
     }

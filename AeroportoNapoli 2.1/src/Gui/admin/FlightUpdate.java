@@ -531,30 +531,7 @@ public class FlightUpdate extends BasePanel implements Resettable{
         String flightNum = flightnum.getText().trim();
 
         try {
-            con = Controller.getConnection();
-
-            String sql = "UPDATE `flight` SET `scheduled_date` = ?, `planned_time` = ?, `delay_time` = ?, `assigned_gate` = ?, `flight_status` = ? WHERE `flight_number` = ?";
-            pst = con.prepareStatement(sql);
-
-            pst.setString(1, Date);
-            pst.setString(2, Time);
-
-            if (Delay.isEmpty()) {
-                pst.setNull(3, java.sql.Types.TIME);
-            } else {
-                pst.setString(3, Delay);
-            }
-
-            if (Gate.isEmpty()) {
-                pst.setNull(4, java.sql.Types.VARCHAR);
-            } else {
-                pst.setString(4, Gate);
-            }
-
-            pst.setString(5, Status);
-            pst.setString(6, flightNum);
-
-            int addedrow = pst.executeUpdate();
+            int addedrow = User.adminUpdateFlight(Date,Time,Gate,Status,Delay,flightNum);
             if (addedrow > 0) {
                 JOptionPane.showMessageDialog(this, "Flight " + flightNum + " updated successfully!");
                 Controller.loadFlightDataForAdminUpdate(flighttable);

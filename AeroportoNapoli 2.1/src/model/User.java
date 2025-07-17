@@ -1,12 +1,17 @@
 package model;
 
 import controller.Controller;
+
+import javax.swing.*;
 import java.sql.*;
 import java.util.Random;
 
 
 public class User {
-    
+    static Connection con = null;
+    static PreparedStatement pst = null;
+    static ResultSet rs = null;
+
     private int userId;
     
     private String username;
@@ -15,6 +20,7 @@ public class User {
 
     public User(){
     }
+    //operazioni generiche
     public User(int userId, String username, boolean admin){    
         
         //prendo il valore autoincrementato da una variabile contatore statica nel main
@@ -54,12 +60,7 @@ public class User {
     }
     
     public static boolean register(String username, String password) throws SQLException {
-        Connection con = null;
-        PreparedStatement pst = null;
-        ResultSet rs = null;
-        
-        
-        
+
         try{
             con = Controller.getConnection();
 
@@ -74,8 +75,8 @@ public class User {
             }
             
                     // Inserisci nuovo utente
-            String insertSQL = "INSERT INTO user (username, password, admin) VALUES (?, ?, 0)";
-            pst = con.prepareStatement(insertSQL);
+            String sql = "INSERT INTO user (username, password, admin) VALUES (?, ?, 0)";
+            pst = con.prepareStatement(sql);
             pst.setString(1, username);
             pst.setString(2, password); // In futuro: cifrare
             pst.executeUpdate();
@@ -89,9 +90,31 @@ public class User {
             try { if (pst != null) pst.close(); } catch (SQLException ignored) {}
         }
     }
-    
+
+    public boolean setUserData(String username, String password) throws SQLException{
+        String sql = "SELECT id, admin FROM user WHERE username = ? AND password = ?";
+
+        try (
+                Connection con = Controller.getConnection();
+                PreparedStatement pst = con.prepareStatement(sql);
+        ) {
+            pst.setString(1, username);
+            pst.setString(2, password);
+
+            try (ResultSet rs = pst.executeQuery()) {
+                if (rs.next()) {
+                    this.userId = rs.getInt("id");
+                    this.username = username;
+                    this.admin = rs.getBoolean("admin"); // se è null in db, ritorna false
+                    return true; // dati aggiornati correttamente
+                }
+            }
+        }
+        return false; // username/password errati
+    }
+    //operazioni admin
     public static boolean adminNewFlight(String departureAirport,String arrivalAirport,String flightCompany,String scheduledDate,String plannedTime) throws SQLException {
-        Connection con = null;
+        Connection con;
         PreparedStatement pst = null;
 
         Random rand = new Random();
@@ -118,29 +141,37 @@ public class User {
             try { if (pst != null) pst.close(); } catch (SQLException ignored) {}
         }
     }
-    
-    public boolean setUserData(String username, String password) throws SQLException{
-    String sql = "SELECT id, admin FROM user WHERE username = ? AND password = ?";
 
-    try (
-        Connection con = Controller.getConnection();
-        PreparedStatement pst = con.prepareStatement(sql);
-    ) {
-        pst.setString(1, username);
-        pst.setString(2, password);
+    public static int adminUpdateFlight(String Date,String Time,String Gate,String Status,String Delay,String flightNum) throws SQLException{
 
-        try (ResultSet rs = pst.executeQuery()) {
-            if (rs.next()) {
-                this.userId = rs.getInt("id");
-                this.username = username;
-                this.admin = rs.getBoolean("admin"); // se è null in db, ritorna false
-                return true; // dati aggiornati correttamente
-            }
+        con = Controller.getConnection();
+
+        String sql = "UPDATE `flight` SET `scheduled_date` = ?, `planned_time` = ?, `delay_time` = ?, `assigned_gate` = ?, `flight_status` = ? WHERE `flight_number` = ?";
+        pst = con.prepareStatement(sql);
+
+        pst.setString(1, Date);
+        pst.setString(2, Time);
+
+        if (Delay.isEmpty()) {
+            pst.setNull(3, java.sql.Types.TIME);
+        } else {
+            pst.setString(3, Delay);
         }
+
+        if (Gate.isEmpty()) {
+            pst.setNull(4, java.sql.Types.VARCHAR);
+        } else {
+            pst.setString(4, Gate);
+        }
+
+        pst.setString(5, Status);
+        pst.setString(6, flightNum);
+
+        int addedrow = pst.executeUpdate();
+
+
+        return addedrow;
     }
-    return false; // username/password errati
-    }
-    
     
     
     
@@ -161,10 +192,7 @@ public class User {
         return this.admin;
     }
             
-    public void setUsername(String username){
-        this.username = username;
-    }
-    
+
     public void UserDrop(){
         this.userId = 0;
         this.username = null;

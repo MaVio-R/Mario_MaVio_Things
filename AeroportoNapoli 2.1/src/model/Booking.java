@@ -8,6 +8,7 @@ import java.sql.*;
 
 public class Booking {
 
+
    private int bookingNumber;
     private int userId;
     private int flightId;

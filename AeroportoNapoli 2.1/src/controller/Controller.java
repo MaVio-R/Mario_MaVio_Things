@@ -34,24 +34,27 @@ public class Controller {
         }
     }
 
-    private static void loadData(JTable table, String query, int columnCount) {
+    private static void loadData(JTable table, String query, int columnCount, Object... params) {
         DefaultTableModel model = (DefaultTableModel) table.getModel();
         model.setRowCount(0); // Pulisce la tabella
 
-        try {
-            Connection con = getConnection();
-            PreparedStatement pst = con.prepareStatement(query);
-            ResultSet rs = pst.executeQuery();
+        try (Connection con = getConnection();
+             PreparedStatement pst = con.prepareStatement(query)) {
 
-            while (rs.next()) {
-                Object[] row = new Object[columnCount];
-                // Itera sulle colonne
-                for (int i = 0; i < columnCount; i++) {
-                    row[i] = rs.getObject(i + 1); // Indici 1-based
-                }
-                model.addRow(row);
+            // Imposta i parametri nella query (opzionale)
+            for (int i = 0; i < params.length; i++) {
+                pst.setObject(i + 1, params[i]);
             }
 
+            try (ResultSet rs = pst.executeQuery()) {
+                while (rs.next()) {
+                    Object[] row = new Object[columnCount];
+                    for (int i = 0; i < columnCount; i++) {
+                        row[i] = rs.getObject(i + 1); // Indici 1-based
+                    }
+                    model.addRow(row);
+                }
+            }
         } catch (SQLException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null,
@@ -59,38 +62,88 @@ public class Controller {
                     "Errore", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
-    public static Flight searchFlightByCode(String flightCode) throws SQLException {
-        String query = "SELECT * FROM flight WHERE flight_number = ?";
-        PreparedStatement pst = null;
-        ResultSet rs = null;
 
-        try (Connection con = getConnection()) {
-            pst = con.prepareStatement(query);
-            pst.setString(1, flightCode);
-            rs = pst.executeQuery();
 
-            if (rs.next()) {
-                return new Flight(
-                        rs.getInt("id"),
-                        rs.getString("flight_number"),
-                        rs.getString("flight_company"),
-                        rs.getString("departure_airport"),
-                        rs.getString("arrival_airport"),
-                        rs.getDate("scheduled_date"),
-                        rs.getTime("planned_time"),
-                        rs.getTime("delay_time"),
-                        rs.getString("assigned_gate"),
-                        rs.getString("flight_status") // Passa come String, sarà convertito nel costruttore
-            );
+    public static String[] getBookingDetailsByNumber(int bookingNumber) {
+        String query = "SELECT first_name, last_name FROM booking WHERE booking_number = ?";
+        try (Connection con = getConnection();
+             PreparedStatement pst = con.prepareStatement(query)) {
+
+            pst.setInt(1, bookingNumber); // Inseriamo il numero di prenotazione nella query
+
+            try (ResultSet rs = pst.executeQuery()) {
+                if (rs.next()) {
+                    String firstName = rs.getString("first_name");
+                    String lastName = rs.getString("last_name");
+                    return new String[]{firstName, lastName};
+                } else {
+                    JOptionPane.showMessageDialog(null,
+                            "Nessuna prenotazione trovata per il numero: " + bookingNumber,
+                            "Errore", JOptionPane.WARNING_MESSAGE);
+                    return null;
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null,
+                    "Errore durante il recupero dei dettagli della prenotazione: " + e.getMessage(),
+                    "Errore", JOptionPane.ERROR_MESSAGE);
+            return null;
         }
-    } finally {
-        if (rs != null) rs.close();
-        if (pst != null) pst.close();
     }
 
-    return null;
-}
+    public static boolean updateBookingDetails(int bookingNumber, String firstName, String lastName) {
+        String query = "UPDATE booking SET first_name = ?, last_name = ? WHERE booking_number = ?";
+        try (Connection con = getConnection();
+             PreparedStatement pst = con.prepareStatement(query)) {
+
+            // Imposta i parametri
+            pst.setString(1, firstName);
+            pst.setString(2, lastName);
+            pst.setInt(3, bookingNumber);
+
+            // Esegue l'update
+            int rowsAffected = pst.executeUpdate();
+            return rowsAffected > 0; // Ritorna true se sono state effettuate modifiche
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null,
+                    "Errore durante l'aggiornamento della prenotazione: " + e.getMessage(),
+                    "Errore", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+    }
+
+
+
+    public static boolean updateBookingStatus(int bookingNumber, String newStatus) {
+        String query = "UPDATE booking SET booking_status = ? WHERE booking_number = ?";
+        try (Connection con = getConnection();
+             PreparedStatement pst = con.prepareStatement(query)) {
+
+            // Imposta i parametri
+            pst.setString(1, newStatus);
+            pst.setInt(2, bookingNumber);
+
+            // Esegui l'update
+            int rowsAffected = pst.executeUpdate();
+            return rowsAffected > 0; // Ritorna true se una riga è stata aggiornata
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null,
+                    "Errore durante l'aggiornamento dello stato della prenotazione: " + e.getMessage(),
+                    "Errore", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+    }
+
+
+
+
+
 
     public static boolean bookFlight(int userId, int flightId, String firstName, String lastName) throws SQLException {
         String query = "INSERT INTO booking (user_id, flight_id, booking_number, first_name, last_name, seat_number, booking_status) VALUES (?, ?, ?, ?, ?, ?, 'CONFIRMED')";
@@ -139,18 +192,47 @@ public class Controller {
         loadData(bookedtable, query, 5);
     }
 
-    public static boolean updateBookingDetails(int bookingId, String newFirstName, String newLastName) throws SQLException {
-        String query = "UPDATE booking SET first_name = ?, last_name = ? WHERE id = ?";
+    public static void loadBookingsForCurrentUser(JTable table) {
+        // Recuperiamo l'id dell'utente collegato dall'oggetto AeroportoNapoli.LoggedUser
+        int currentUserId = AeroportoNapoli.LoggedUser.getUserId();
 
-        try (Connection con = getConnection();
-             PreparedStatement pst = con.prepareStatement(query)) {
+        String query = """
+    SELECT 
+        b.booking_number AS 'BOOK COD',
+        b.first_name AS 'NOME',
+        f.flight_number AS 'FLIGHT COD',
+        b.booking_status AS 'STATUS', -- Modificato qui
+        b.seat_number AS 'SEAT NUM'
+    FROM 
+        booking b
+    JOIN 
+        flight f ON b.flight_id = f.id
+    WHERE 
+        b.user_id = ?
+    """;
 
-            pst.setString(1, newFirstName);
-            pst.setString(2, newLastName);
-            pst.setInt(3, bookingId);
+        // Caricare i dati nella tabella
+        loadData(table, query, 5, currentUserId);
+    }
+    public static void loadBookingsByName(JTable table, String name) {
+        int currentUserId = AeroportoNapoli.LoggedUser.getUserId();
 
-            int rowsAffected = pst.executeUpdate();
-            return rowsAffected > 0; // Ritorna true se almeno una riga è stata aggiornata
-        }
+        String query = """
+    SELECT 
+        b.booking_number AS 'BOOK COD',
+        b.first_name AS 'NOME',
+        f.flight_number AS 'FLIGHT COD',
+        b.booking_status AS 'STATUS', -- Modificato qui
+        b.seat_number AS 'SEAT NUM'
+    FROM 
+        booking b
+    JOIN 
+        flight f ON b.flight_id = f.id
+    WHERE 
+        b.user_id = ? AND b.first_name LIKE ?
+    """;
+
+        String nameFilter = "%" + name.trim() + "%";
+        loadData(table, query, 5, currentUserId, nameFilter);
     }
 }
