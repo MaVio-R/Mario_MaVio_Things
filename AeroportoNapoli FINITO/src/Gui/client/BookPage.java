@@ -483,12 +483,10 @@ public class BookPage extends BasePanel implements Resettable{
         Arrival.setText(arrival);
         FlightCompany.setText(flightCompany);
 
-        // Aggiorna il numero di volo selezionato
-        selectedFlightNumber = selectedFlightNumber;
-
         // Messaggio di conferma per l'utente
         JOptionPane.showMessageDialog(this, "Dati del volo caricati con successo!", "Successo", JOptionPane.INFORMATION_MESSAGE);
     }
+
     private void BookButtonActionPerformed(java.awt.event.ActionEvent evt) {
         // Recapta i dati inseriti dall'utente
         String firstName = FirstName.getText().trim();
