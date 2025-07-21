@@ -1,0 +1,47 @@
+sequenceDiagram
+    participant U as User
+    participant LP as LoginPage
+    participant C as Controller
+    participant User as User Class
+    participant DB as Database
+
+    U->>LP: Press Login Button
+    LP->>LP: Get username and password
+    LP->>LP: Check for empty fields
+    
+    alt Fields are empty
+        LP->>U: Show "All fields must be filled" Error
+    else Fields are valid
+        LP->>C: Authenticate(username, password)
+        C->>User: authenticateUser(username, password)
+        User->>User: validateInput(username, password)
+        
+        alt Input validation fails
+            User->>C: throw Exception
+            C->>LP: return false
+            LP->>U: Show "Invalid credentials" Error
+        else Input validation success
+            User->>DB: SELECT * FROM user WHERE username = ? AND password = ?
+            
+            alt User not found
+                DB->>User: ResultSet empty (rs.next() = false)
+                User->>C: return null
+                C->>LP: return false
+                LP->>U: Show "Invalid credentials" Error
+            else User found
+                DB->>User: Return user data
+                User->>User: Create User object and set LoggedUser
+                User->>C: return User object
+                C->>LP: return true
+                LP->>C: isCurrentUserAdmin()
+                
+                alt User is admin
+                    C->>LP: return true
+                    LP->>LP: panelController.showPanel("homepageadmin")
+                else User is client
+                    C->>LP: return false
+                    LP->>LP: panelController.showPanel("homepageclient")
+                end
+            end
+        end
+    end
