@@ -3,9 +3,18 @@ package Gui.admin;
 import controller.*;
 import javax.swing.*;
 
+/**
+ * The type Flight update.
+ */
 public class FlightUpdate extends BasePanel implements Resettable{
 
 
+    /**
+     * Instantiates a new Flight update.
+     *
+     * @param container       the container
+     * @param panelController the panel controller
+     */
     public FlightUpdate(JPanel container,PanelController panelController) {
         super(container, panelController);
 

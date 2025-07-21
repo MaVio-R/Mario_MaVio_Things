@@ -5,10 +5,18 @@ import javax.swing.*;
 
 import javax.swing.table.DefaultTableModel;
 
+/**
+ * The type Book page.
+ */
 public class BookPage extends BasePanel implements Resettable{
 
 
-
+    /**
+     * Instantiates a new Book page.
+     *
+     * @param container       the container
+     * @param panelController the panel controller
+     */
     public BookPage(JPanel container,PanelController panelController) {
         super(container, panelController);
         initComponents();

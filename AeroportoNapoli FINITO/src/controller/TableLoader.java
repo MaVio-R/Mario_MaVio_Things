@@ -4,8 +4,19 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.sql.*;
 
+/**
+ * The type Table loader.
+ */
 public class TableLoader {
 
+    /**
+     * Load data.
+     *
+     * @param table       the table
+     * @param query       the query
+     * @param columnCount the column count
+     * @param params      the params
+     */
     public static void loadData(JTable table, String query, int columnCount, Object... params) {
         DefaultTableModel model = (DefaultTableModel) table.getModel();
         model.setRowCount(0);
@@ -35,6 +46,11 @@ public class TableLoader {
     }
 
 
+    /**
+     * Load bookings for current user.
+     *
+     * @param table the table
+     */
     public static void loadBookingsForCurrentUser(JTable table) {
         int currentUserId = AeroportoNapoli.LoggedUser.getUserId();
 
@@ -56,6 +72,12 @@ public class TableLoader {
         loadData(table, query, 5, currentUserId);
     }
 
+    /**
+     * Load bookings by name.
+     *
+     * @param table the table
+     * @param name  the name
+     */
     public static void loadBookingsByName(JTable table, String name) {
         int currentUserId = AeroportoNapoli.LoggedUser.getUserId();
 

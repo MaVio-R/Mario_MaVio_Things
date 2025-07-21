@@ -4,10 +4,21 @@ import java.awt.CardLayout;
 import javax.swing.*;
 import model.User;
 
+/**
+ * The type Aeroporto napoli.
+ */
 public class AeroportoNapoli {
 
+    /**
+     * The constant LoggedUser.
+     */
     public static User LoggedUser = null;
 
+    /**
+     * Main.
+     *
+     * @param args the args
+     */
     public static void main(String[] args){
 
         JFrame frame = new JFrame("Aeroporto di Napoli");

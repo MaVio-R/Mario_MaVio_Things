@@ -3,8 +3,17 @@ package Gui.client;
 import controller.*;
 import javax.swing.*;
 
+/**
+ * The type Home page client.
+ */
 public class HomePageClient extends BasePanel implements Resettable{
 
+    /**
+     * Instantiates a new Home page client.
+     *
+     * @param container       the container
+     * @param panelController the panel controller
+     */
     public HomePageClient(JPanel container,PanelController panelController) {
         super(container, panelController);
         initComponents();

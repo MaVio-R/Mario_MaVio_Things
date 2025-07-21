@@ -3,8 +3,17 @@ package Gui;
 import controller.*;
 import javax.swing.*;
 
+/**
+ * The type Login.
+ */
 public class Login extends BasePanel implements Resettable {
-    
+
+    /**
+     * Instantiates a new Login.
+     *
+     * @param container       the container
+     * @param panelController the panel controller
+     */
     public Login(JPanel container,PanelController panelController) {
         super(container, panelController);
         initComponents();

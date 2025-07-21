@@ -7,8 +7,17 @@ import java.time.*;
 import java.time.format.*;
 import model.User;
 
+/**
+ * The type New flight page.
+ */
 public class NewFlightPage extends BasePanel implements Resettable{
-    
+
+    /**
+     * Instantiates a new New flight page.
+     *
+     * @param container       the container
+     * @param panelController the panel controller
+     */
     public NewFlightPage(JPanel container,PanelController panelController) {
         super(container, panelController);
         initComponents();

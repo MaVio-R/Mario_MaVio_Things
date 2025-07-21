@@ -5,10 +5,19 @@ import javax.swing.*;
 
 import javax.swing.table.DefaultTableModel;
 
+/**
+ * The type Client profile.
+ */
 public class ClientProfile extends BasePanel implements Resettable{
 
     private String savedBookingCode;
 
+    /**
+     * Instantiates a new Client profile.
+     *
+     * @param container       the container
+     * @param panelController the panel controller
+     */
     public ClientProfile(JPanel container,PanelController panelController) {
         super(container, panelController);
         initComponents();

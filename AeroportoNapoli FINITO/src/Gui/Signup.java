@@ -3,8 +3,17 @@ package Gui;
 import controller.*;
 import javax.swing.*;
 
+/**
+ * The type Signup.
+ */
 public class Signup extends BasePanel implements Resettable{
 
+    /**
+     * Instantiates a new Signup.
+     *
+     * @param container       the container
+     * @param panelController the panel controller
+     */
     public Signup(JPanel container,PanelController panelController) {
         super(container, panelController);
         initComponents();

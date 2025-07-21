@@ -3,9 +3,18 @@ package Gui;
 import controller.*;
 import javax.swing.*;
 
+/**
+ * The type Home page.
+ */
 public class HomePage extends BasePanel implements Resettable {
 
-    
+
+    /**
+     * Instantiates a new Home page.
+     *
+     * @param container       the container
+     * @param panelController the panel controller
+     */
     public HomePage(JPanel container,PanelController panelController) {
         super(container, panelController);
         initComponents();

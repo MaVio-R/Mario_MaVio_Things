@@ -7,16 +7,29 @@ import java.awt.CardLayout;
 import java.util.*;
 import javax.swing.*;
 
+/**
+ * The type Panel controller.
+ */
 public class PanelController {
 private final JPanel container;
     private final CardLayout layout;
     private final Map<String, JPanel> loadedPanels = new HashMap<>();
 
+    /**
+     * Instantiates a new Panel controller.
+     *
+     * @param container the container
+     */
     public PanelController(JPanel container) {
         this.container = container;
         this.layout = (CardLayout) container.getLayout();
     }
 
+    /**
+     * Show panel.
+     *
+     * @param name the name
+     */
     public void showPanel(String name) {
         if (!loadedPanels.containsKey(name)) {
             JPanel panel = createPanel(name);

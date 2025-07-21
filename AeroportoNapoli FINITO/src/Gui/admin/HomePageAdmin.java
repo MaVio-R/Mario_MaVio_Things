@@ -3,8 +3,17 @@ package Gui.admin;
 import controller.*;
 import javax.swing.*;
 
+/**
+ * The type Home page admin.
+ */
 public class HomePageAdmin extends BasePanel implements Resettable{
 
+    /**
+     * Instantiates a new Home page admin.
+     *
+     * @param container       the container
+     * @param panelController the panel controller
+     */
     public HomePageAdmin(JPanel container,PanelController panelController) {
         super(container, panelController);
 

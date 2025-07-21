@@ -6,8 +6,19 @@ import java.sql.*;
 import java.util.Random;
 import javax.swing.JOptionPane;
 
+/**
+ * The type Booking.
+ */
 public class Booking {
 
+    /**
+     * Create booking boolean.
+     *
+     * @param flightNumber the flight number
+     * @param firstName    the first name
+     * @param lastName     the last name
+     * @return the boolean
+     */
     public static boolean createBooking(String flightNumber, String firstName, String lastName) {
         try {
             // Recupera l'ID del volo dal numero
@@ -61,7 +72,10 @@ public class Booking {
     }
 
     /**
-     * Recupera i dettagli di una prenotazione tramite numero prenotazione
+     * Get booking details by number string [ ].
+     *
+     * @param bookingNumber the booking number
+     * @return the string [ ]
      */
     public static String[] getBookingDetailsByNumber(int bookingNumber) {
         String query = "SELECT first_name, last_name FROM booking WHERE booking_number = ?";
@@ -92,7 +106,12 @@ public class Booking {
     }
 
     /**
-     * Aggiorna i dettagli di una prenotazione
+     * Update booking details boolean.
+     *
+     * @param bookingNumber the booking number
+     * @param firstName     the first name
+     * @param lastName      the last name
+     * @return the boolean
      */
     public static boolean updateBookingDetails(int bookingNumber, String firstName, String lastName) {
         String query = "UPDATE booking SET first_name = ?, last_name = ? WHERE booking_number = ?";
@@ -116,7 +135,11 @@ public class Booking {
     }
 
     /**
-     * Aggiorna lo stato di una prenotazione
+     * Update booking status boolean.
+     *
+     * @param bookingNumber the booking number
+     * @param newStatus     the new status
+     * @return the boolean
      */
     public static boolean updateBookingStatus(int bookingNumber, String newStatus) {
         String query = "UPDATE booking SET booking_status = ? WHERE booking_number = ?";
@@ -138,7 +161,6 @@ public class Booking {
         }
     }
 
-    // Metodi di supporto privati
 
     private static int getFlightIdByNumber(String flightNumber) {
         String query = "SELECT id FROM flight WHERE flight_number = ?";
