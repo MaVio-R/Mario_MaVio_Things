@@ -1,6 +1,7 @@
 package model;
 
 import controller.*;
+import dao.UserDAO;
 
 import java.sql.*;
 
@@ -36,27 +37,7 @@ public class User {
      */
     public static User authenticate(String username, String password) throws SQLException {
         validateInput(username, password);
-
-        String sql = "SELECT * FROM user WHERE username = ? AND password = ?";
-
-        try (Connection con = Controller.getConnection();
-             PreparedStatement pst = con.prepareStatement(sql)) {
-            pst.setString(1, username);
-            pst.setString(2, password);
-
-            try (ResultSet rs = pst.executeQuery()) {
-                if (rs.next()) {
-                    int id = rs.getInt("id");
-                    boolean isAdmin = rs.getBoolean("admin");
-
-                    User authenticatedUser = new User(id, username, isAdmin);
-                    AeroportoNapoli.LoggedUser = authenticatedUser;
-
-                    return authenticatedUser;
-                }
-            }
-        }
-        return null;
+        return UserDAO.findByCredentials(username, password);
     }
 
     /**
@@ -69,18 +50,7 @@ public class User {
      */
     public static boolean register(String username, String password) throws SQLException {
         validateInput(username, password);
-
-        String query = "INSERT INTO user (username, password, admin) VALUES (?, ?, false)";
-
-        try (Connection con = Controller.getConnection();
-             PreparedStatement pst = con.prepareStatement(query)) {
-
-            pst.setString(1, username);
-            pst.setString(2, password);
-
-            int rowsAffected = pst.executeUpdate();
-            return rowsAffected > 0;
-        }
+        return UserDAO.insert(username, password);
     }
 
     /**
@@ -101,9 +71,10 @@ public class User {
      */
     public static boolean authenticateUser(String username, String password) {
         try {
-            User loggedUser = User.authenticate(username, password);
+            User loggedUser = UserDAO.findByCredentials(username, password);
 
             if (loggedUser != null) {
+                AeroportoNapoli.LoggedUser = loggedUser;
                 return true;
             }
 
@@ -131,10 +102,18 @@ public class User {
         }
 
         try {
-            boolean isRegistered = User.register(username, password);
+            // Verifica se l'username esiste già
+            if (UserDAO.usernameExists(username)) {
+                return false;
+            }
+
+            boolean isRegistered = UserDAO.insert(username, password);
 
             if (isRegistered) {
-                User.authenticate(username, password);
+                User newUser = UserDAO.findByCredentials(username, password);
+                if (newUser != null) {
+                    AeroportoNapoli.LoggedUser = newUser;
+                }
             }
 
             return isRegistered;
@@ -143,7 +122,6 @@ public class User {
             return false;
         }
     }
-
 
     /**
      * Admin new flight boolean.

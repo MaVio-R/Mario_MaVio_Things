@@ -1,7 +1,9 @@
 package controller;
 
 import model.*;
+import dao.*;
 import java.sql.*;
+import java.util.List;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
@@ -47,6 +49,8 @@ public class Controller {
         }
     }
 
+    // Metodi di autenticazione e registrazione utilizzando UserDAO
+
     /**
      * Authenticate boolean.
      *
@@ -54,9 +58,28 @@ public class Controller {
      * @param password the password
      * @return the boolean
      */
-// Metodi di autenticazione e registrazione
     public static boolean Authenticate(String username, String password) {
-        return User.authenticateUser(username, password);
+        if (username == null || username.trim().isEmpty() ||
+                password == null || password.trim().isEmpty()) {
+            return false;
+        }
+
+        try {
+            User loggedUser = UserDAO.findByCredentials(username, password);
+
+            if (loggedUser != null) {
+                AeroportoNapoli.LoggedUser = loggedUser;
+                return true;
+            }
+            return false;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null,
+                    "Errore del database durante l'autenticazione: " + e.getMessage(),
+                    "Errore",
+                    JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
     }
 
     /**
@@ -65,7 +88,7 @@ public class Controller {
      * @return the boolean
      */
     public static boolean isCurrentUserAdmin() {
-        return User.isCurrentUserAdmin();
+        return AeroportoNapoli.LoggedUser != null && AeroportoNapoli.LoggedUser.getAdmin();
     }
 
     /**
@@ -76,7 +99,139 @@ public class Controller {
      * @return the boolean
      */
     public static boolean registerUser(String username, String password) {
-        return User.registerUser(username, password);
+        if (username == null || username.trim().isEmpty() ||
+                password == null || password.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null,
+                    "Username e password sono obbligatori",
+                    "Errore di validazione",
+                    JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        try {
+            // Verifica se l'username esiste già utilizzando UserDAO
+            if (UserDAO.usernameExists(username)) {
+                JOptionPane.showMessageDialog(null,
+                        "Username già esistente. Sceglierne un altro.",
+                        "Errore",
+                        JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+
+            // Inserisce il nuovo utente utilizzando UserDAO
+            boolean isRegistered = UserDAO.insert(username, password);
+
+            if (isRegistered) {
+                // Autentica automaticamente l'utente dopo la registrazione
+                User newUser = UserDAO.findByCredentials(username, password);
+                if (newUser != null) {
+                    AeroportoNapoli.LoggedUser = newUser;
+                }
+
+                JOptionPane.showMessageDialog(null,
+                        "Registrazione completata con successo!",
+                        "Successo",
+                        JOptionPane.INFORMATION_MESSAGE);
+            }
+
+            return isRegistered;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null,
+                    "Errore del database durante la registrazione: " + e.getMessage(),
+                    "Errore",
+                    JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+    }
+
+    /**
+     * Gets current user.
+     *
+     * @return the current user
+     */
+    public static User getCurrentUser() {
+        return AeroportoNapoli.LoggedUser;
+    }
+
+    /**
+     * Logout.
+     */
+    public static void logout() {
+        AeroportoNapoli.LoggedUser = null;
+    }
+
+    /**
+     * Find user by username user.
+     *
+     * @param username the username
+     * @return the user
+     */
+    public static User findUserByUsername(String username) {
+        try {
+            return UserDAO.findByUsername(username);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null,
+                    "Errore durante la ricerca dell'utente: " + e.getMessage(),
+                    "Errore",
+                    JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+    }
+
+    /**
+     * Find user by id user.
+     *
+     * @param userId the user id
+     * @return the user
+     */
+    public static User findUserById(int userId) {
+        try {
+            return UserDAO.findById(userId);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null,
+                    "Errore durante la ricerca dell'utente: " + e.getMessage(),
+                    "Errore",
+                    JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+    }
+
+    /**
+     * Update user password boolean.
+     *
+     * @param userId      the user id
+     * @param newPassword the new password
+     * @return the boolean
+     */
+    public static boolean updateUserPassword(int userId, String newPassword) {
+        if (newPassword == null || newPassword.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null,
+                    "La nuova password non può essere vuota",
+                    "Errore di validazione",
+                    JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        try {
+            boolean updated = UserDAO.updatePassword(userId, newPassword);
+            if (updated) {
+                JOptionPane.showMessageDialog(null,
+                        "Password aggiornata con successo!",
+                        "Successo",
+                        JOptionPane.INFORMATION_MESSAGE);
+            }
+            return updated;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null,
+                    "Errore durante l'aggiornamento della password: " + e.getMessage(),
+                    "Errore",
+                    JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
     }
 
     //funzioni caricamento tabelle
@@ -123,8 +278,29 @@ public class Controller {
      * @param flighttable the flighttable
      */
     public static void loadFlightData(JTable flighttable) {
-        String query = "SELECT flight_number, flight_status, departure_airport, arrival_airport, planned_time, delay_time, assigned_gate FROM flight";
-        loadData(flighttable, query, 7);
+        try {
+            List<Flight> flights = FlightDAO.findAll();
+            DefaultTableModel model = (DefaultTableModel) flighttable.getModel();
+            model.setRowCount(0);
+
+            for (Flight flight : flights) {
+                Object[] row = {
+                        flight.getFlightNumber(),
+                        flight.getFlightStatus().toString(),
+                        flight.getDepartureAirport(),
+                        flight.getArrivalAirport(),
+                        flight.getPlannedTime(),
+                        flight.getDelayTime(),
+                        flight.getAssignedGate()
+                };
+                model.addRow(row);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null,
+                    "Errore durante il caricamento dei voli: " + e.getMessage(),
+                    "Errore", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     //tabelle admin
@@ -135,8 +311,26 @@ public class Controller {
      * @param flighttable the flighttable
      */
     public static void loadFlightDataForAdminUpdate(JTable flighttable) {
-        String query = "SELECT flight_number, departure_airport, arrival_airport, flight_status FROM flight";
-        loadData(flighttable, query, 4);
+        try {
+            List<Flight> flights = FlightDAO.findAll();
+            DefaultTableModel model = (DefaultTableModel) flighttable.getModel();
+            model.setRowCount(0);
+
+            for (Flight flight : flights) {
+                Object[] row = {
+                        flight.getFlightNumber(),
+                        flight.getDepartureAirport(),
+                        flight.getArrivalAirport(),
+                        flight.getFlightStatus().toString()
+                };
+                model.addRow(row);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null,
+                    "Errore durante il caricamento dei voli per admin: " + e.getMessage(),
+                    "Errore", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     //tabelle client
@@ -147,8 +341,28 @@ public class Controller {
      * @param bookedtable the bookedtable
      */
     public static void loadBookableFlights(JTable bookedtable) {
-        String query = "SELECT flight_number, scheduled_date, planned_time, departure_airport, arrival_airport, flight_company FROM flight WHERE flight_status = 'SCHEDULED'";
-        loadData(bookedtable, query, 6);
+        try {
+            List<Flight> flights = FlightDAO.findByStatus("SCHEDULED");
+            DefaultTableModel model = (DefaultTableModel) bookedtable.getModel();
+            model.setRowCount(0);
+
+            for (Flight flight : flights) {
+                Object[] row = {
+                        flight.getFlightNumber(),
+                        flight.getScheduledDate(),
+                        flight.getPlannedTime(),
+                        flight.getDepartureAirport(),
+                        flight.getArrivalAirport(),
+                        flight.getFlightCompany()
+                };
+                model.addRow(row);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null,
+                    "Errore durante il caricamento dei voli prenotabili: " + e.getMessage(),
+                    "Errore", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     /**
@@ -157,7 +371,36 @@ public class Controller {
      * @param table the table
      */
     public static void loadBookingsForCurrentUser(JTable table) {
-        TableLoader.loadBookingsForCurrentUser(table);
+        try {
+            if (AeroportoNapoli.LoggedUser == null) {
+                JOptionPane.showMessageDialog(null,
+                        "Nessun utente loggato",
+                        "Errore",
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            java.util.List<Booking> bookings = BookingDAO.findByUserId(AeroportoNapoli.LoggedUser.getUserId());
+            DefaultTableModel model = (DefaultTableModel) table.getModel();
+            model.setRowCount(0);
+
+            for (Booking booking : bookings) {
+                Object[] row = {
+                        booking.getBookingNumber(),
+                        booking.getFirstName(),
+                        booking.getLastName(),
+                        booking.getSeatNumber(),
+                        booking.getBookingStatus()
+                };
+                model.addRow(row);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null,
+                    "Errore durante il caricamento delle prenotazioni: " + e.getMessage(),
+                    "Errore",
+                    JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     /**
@@ -167,7 +410,39 @@ public class Controller {
      * @param name  the name
      */
     public static void loadBookingsByName(JTable table, String name) {
-        TableLoader.loadBookingsByName(table, name);
+        try {
+
+            String firstName = name;
+
+
+            java.util.List<Booking> bookings = BookingDAO.findByName(firstName);
+            DefaultTableModel model = (DefaultTableModel) table.getModel();
+            model.setRowCount(0);
+
+            for (Booking booking : bookings) {
+                Object[] row = {
+                        booking.getBookingNumber(),
+                        booking.getFirstName(),
+                        booking.getLastName(),
+                        booking.getSeatNumber(),
+                        booking.getBookingStatus()
+                };
+                model.addRow(row);
+            }
+
+            if (bookings.isEmpty()) {
+                JOptionPane.showMessageDialog(null,
+                        "Nessuna prenotazione trovata per: " + firstName ,
+                        "Nessun risultato",
+                        JOptionPane.INFORMATION_MESSAGE);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null,
+                    "Errore durante la ricerca delle prenotazioni: " + e.getMessage(),
+                    "Errore",
+                    JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     //funzioni admin////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -195,7 +470,25 @@ public class Controller {
      */
     public static Flight findFlightByNumber(String flightNumber) {
         try {
-            return Flight.findByFlightNumber(flightNumber);
+            return FlightDAO.findByFlightNumber(flightNumber);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null,
+                    "Errore durante la ricerca del volo: " + e.getMessage(),
+                    "Errore", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+    }
+
+    /**
+     * Find flight by id flight.
+     *
+     * @param id the id
+     * @return the flight
+     */
+    public static Flight findFlightById(int id) {
+        try {
+            return FlightDAO.findById(id);
         } catch (SQLException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null,
@@ -220,7 +513,80 @@ public class Controller {
         return Flight.updateFlightDetails(date, time, gate, status, delay, flightNumber);
     }
 
+    /**
+     * Create flight boolean.
+     *
+     * @param flightNumber     the flight number
+     * @param flightCompany    the flight company
+     * @param departureAirport the departure airport
+     * @param arrivalAirport   the arrival airport
+     * @param scheduledDate    the scheduled date
+     * @param plannedTime      the planned time
+     * @param assignedGate     the assigned gate
+     * @param flightStatus     the flight status
+     * @return the boolean
+     */
+    public static boolean createFlight(String flightNumber, String flightCompany, String departureAirport,
+                                       String arrivalAirport, String scheduledDate, String plannedTime,
+                                       String assignedGate, String flightStatus) {
+        return Flight.createFlight(flightNumber, flightCompany, departureAirport, arrivalAirport,
+                scheduledDate, plannedTime, assignedGate, flightStatus);
+    }
 
+    /**
+     * Delete flight boolean.
+     *
+     * @param id the id
+     * @return the boolean
+     */
+    public static boolean deleteFlight(int id) {
+        return FlightDAO.delete(id);
+    }
+
+    /**
+     * Gets all flights.
+     *
+     * @return the all flights
+     */
+    public static List<Flight> getAllFlights() {
+        try {
+            return FlightDAO.findAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null,
+                    "Errore durante il recupero dei voli: " + e.getMessage(),
+                    "Errore", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+    }
+
+    /**
+     * Gets flights by status.
+     *
+     * @param status the status
+     * @return the flights by status
+     */
+    public static List<Flight> getFlightsByStatus(String status) {
+        try {
+            return FlightDAO.findByStatus(status);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null,
+                    "Errore durante il recupero dei voli per stato: " + e.getMessage(),
+                    "Errore", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+    }
+
+    /**
+     * Gets flight id by number.
+     *
+     * @param flightNumber the flight number
+     * @return the flight id by number
+     */
+    public static int getFlightIdByNumber(String flightNumber) {
+        return FlightDAO.getFlightIdByNumber(flightNumber);
+    }
 
     //funzioni client///////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -258,7 +624,7 @@ public class Controller {
      * @return the string [ ]
      */
     public static String[] getBookingDetailsByNumber(int bookingNumber) {
-        return Booking.getBookingDetailsByNumber(bookingNumber);
+        return BookingDAO.getBookingDetailsByNumber(bookingNumber);
     }
 
     /**
@@ -270,7 +636,7 @@ public class Controller {
      * @return the boolean
      */
     public static boolean updateBookingDetails(int bookingNumber, String firstName, String lastName) {
-        return Booking.updateBookingDetails(bookingNumber, firstName, lastName);
+        return BookingDAO.updateDetails(bookingNumber, firstName, lastName);
     }
 
     /**
@@ -281,6 +647,56 @@ public class Controller {
      * @return the boolean
      */
     public static boolean updateBookingStatus(int bookingNumber, String newStatus) {
-        return Booking.updateBookingStatus(bookingNumber, newStatus);
+        return BookingDAO.updateStatus(bookingNumber, newStatus);
+    }
+
+    //metodi di supporto per le prenotazioni utilizzando BookingDAO
+
+    /**
+     * Find booking by id booking.
+     *
+     * @param id the id
+     * @return the booking
+     */
+    public static Booking findBookingById(int id) {
+        try {
+            return BookingDAO.findById(id);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null,
+                    "Errore durante la ricerca della prenotazione: " + e.getMessage(),
+                    "Errore",
+                    JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+    }
+
+    /**
+     * Find booking by booking number booking.
+     *
+     * @param bookingNumber the booking number
+     * @return the booking
+     */
+    public static Booking findBookingByBookingNumber(int bookingNumber) {
+        try {
+            return BookingDAO.findByBookingNumber(bookingNumber);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null,
+                    "Errore durante la ricerca della prenotazione: " + e.getMessage(),
+                    "Errore",
+                    JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+    }
+
+    /**
+     * Delete booking boolean.
+     *
+     * @param id the id
+     * @return the boolean
+     */
+    public static boolean deleteBooking(int id) {
+        return BookingDAO.delete(id);
     }
 }
